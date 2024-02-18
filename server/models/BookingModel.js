@@ -1,4 +1,4 @@
-// models/booking.model.js
+
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
@@ -6,9 +6,10 @@ const bookingSchema = new mongoose.Schema({
   address: { type: String, required: true },
   phoneNumber: { type: String },
   bookingAmount: { type: Number, required: true },
-  bookingAmountUnit: { type: String, default: 'kg' }, // Store the unit, e.g., kg
+  bookingAmountUnit: { type: String, default: 'kg' },
   bookingDate: { type: Date },
   bookingTime: { type: String },
+  sold: { type: Boolean, default: false }, 
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);

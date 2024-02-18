@@ -4,6 +4,7 @@ const router = express.Router();
 const Users = require('../models/UserModel');
 const Shop = require('../models/ShopModel');
 const Order = require('../models/OrderModel');
+const Booking = require('../models/BookingModel')
 
 // Fetch all users
 router.get('/users', async (req, res) => {
@@ -58,6 +59,16 @@ router.get('/ordertable', async (req, res) => {
   router.get('/shop', async (req, res) => {
     try {
       const shops = await Shop.find();
+      res.json(shops);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  });
+
+  router.get('/bookingdetails', async (req, res) => {
+    try {
+      const shops = await Booking.find();
       res.json(shops);
     } catch (error) {
       console.error(error);

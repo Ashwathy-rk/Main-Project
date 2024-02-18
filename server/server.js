@@ -34,11 +34,12 @@ app.use("/api/shopreg",shopreg)
 app.use("/api/ordertable",table)
 app.use("/api/users",table)
 app.use("/api/user",table)
+app.use("/api/bookingdetails",table)
 app.use("/api/shopview",shopreg)
 app.use("/api/approve",shopreg)
 app.use("/api/dailyslot",dailyslot)
 app.use("/api/bookslot",bookslot)
-
+app.use("/api/bookingsold",bookslot) 
 
 
 mongoose.connect('mongodb://localhost:27017/Project')

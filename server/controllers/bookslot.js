@@ -43,4 +43,40 @@ router.post('/bookslot', async (req, res) => {
   }
 });
 
+
+
+
+router.patch('/api/bookingsold/:bookingId', async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const { sold } = req.body;
+
+    console.log('Received request to update bookingId:', bookingId, 'with sold:', sold);
+
+    // Validate if bookingId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(bookingId)) {
+      return res.status(400).json({ error: 'Invalid bookingId' });
+    }
+
+    // Update the 'sold' property in the database using findOneAndUpdate
+    const updatedBooking = await Booking.findOneAndUpdate(
+      { _id: bookingId },
+      { $set: { sold } },
+      { new: true }
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    console.log('Updated Booking:', updatedBooking);
+    res.json(updatedBooking);
+  } catch (error) {
+    console.error('Error updating sold status:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
 module.exports = router;

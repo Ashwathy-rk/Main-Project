@@ -78,7 +78,6 @@ router.patch('/approve/:shopId', async (req, res) => {
 });
 
 
-
 router.get('/shopview', async (req, res) => {
   try {
     const shops = await Shop.find({ approved: true });

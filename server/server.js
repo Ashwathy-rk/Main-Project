@@ -16,6 +16,8 @@ const table = require("./controllers/table")
 const dailyslot = require("./controllers/dailyslot")
 const bookslot = require("./controllers/bookslot")
 const dealerreg = require("./controllers/dealerreg")
+const auction = require("./controllers/auction")
+const license = require("./controllers/license")
 
 
 
@@ -45,6 +47,11 @@ app.use("/api/bookingsold",bookslot)
 app.use("/api/dealerreg",dealerreg)
 app.use("/api/dealerview",dealerreg)
 app.use("/api/approvedealer",dealerreg)
+app.use("/api/addauction",auction)
+app.use("/api/getauctions",auction)
+app.use("/api/licenserequest",license)
+app.use("/api/getlicense",license)
+app.use("/api/generatelicense",license)
 
 mongoose.connect('mongodb://localhost:27017/Project')
   .then(() => {

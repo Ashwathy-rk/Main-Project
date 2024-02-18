@@ -52,7 +52,7 @@ router.post('/dealerreg', upload.single('dealerLicense'), async (req, res) => {
   }
 });
 
-router.patch('/approve/:dealerId', async (req, res) => {
+router.patch('/approvedealer/:dealerId', async (req, res) => {
   try {
     const { dealerId } = req.params;
     const { approved } = req.body;
@@ -72,6 +72,7 @@ router.patch('/approve/:dealerId', async (req, res) => {
     res.status(500).json({ msg: 'Internal Server Error' });
   }
 });
+
 
 router.get('/dealerview', async (req, res) => {
   try {

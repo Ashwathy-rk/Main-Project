@@ -5,6 +5,7 @@ const Users = require('../models/UserModel');
 const Shop = require('../models/ShopModel');
 const Order = require('../models/OrderModel');
 const Booking = require('../models/BookingModel')
+const Dealer = require('../models/DealerModel')
 
 // Fetch all users
 router.get('/users', async (req, res) => {
@@ -65,6 +66,18 @@ router.get('/ordertable', async (req, res) => {
       res.status(500).json({ message: 'Server Error' });
     }
   });
+
+  router.get('/dealertable', async (req, res) => {
+    try {
+      const shops = await Dealer.find();
+      res.json(shops);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  });
+
+
 
   router.get('/bookingdetails', async (req, res) => {
     try {

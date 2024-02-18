@@ -15,6 +15,7 @@ const shopreg = require("./controllers/shopreg")
 const table = require("./controllers/table")
 const dailyslot = require("./controllers/dailyslot")
 const bookslot = require("./controllers/bookslot")
+const dealerreg = require("./controllers/dealerreg")
 
 
 
@@ -34,13 +35,16 @@ app.use("/api/shopreg",shopreg)
 app.use("/api/ordertable",table)
 app.use("/api/users",table)
 app.use("/api/user",table)
+app.use("/api/dealertable",table)
 app.use("/api/bookingdetails",table)
 app.use("/api/shopview",shopreg)
 app.use("/api/approve",shopreg)
 app.use("/api/dailyslot",dailyslot)
 app.use("/api/bookslot",bookslot)
 app.use("/api/bookingsold",bookslot) 
-
+app.use("/api/dealerreg",dealerreg)
+app.use("/api/dealerview",dealerreg)
+app.use("/api/approvedealer",dealerreg)
 
 mongoose.connect('mongodb://localhost:27017/Project')
   .then(() => {

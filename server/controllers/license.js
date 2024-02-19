@@ -53,7 +53,6 @@ router.get('/generatelicense/:licenseid', async (req, res) => {
       }
   
       // Create a PDF document
-      const nodemailer = require('nodemailer');
       const pdfDoc = new PDFDocument();
   
       // Set the content of the PDF
@@ -61,7 +60,7 @@ router.get('/generatelicense/:licenseid', async (req, res) => {
       pdfDoc.text(`Your License for Accessing the Spicesboard has been issued for ${licenseRequest.dealerName}`);
       pdfDoc.text(`Email: ${licenseRequest.dealerEmail}`);
       pdfDoc.text(`Trade Code: ${licenseRequest.tradeCode}`);
-  
+
       // Set response headers
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `inline; filename=license_${requestId}.pdf`);
@@ -142,4 +141,6 @@ router.get('/generatelicense/:licenseid', async (req, res) => {
     }
   });
   
-  module.exports = router;
+module.exports = router;
+
+

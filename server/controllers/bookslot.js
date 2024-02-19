@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Booking = require('../models/BookingModel');
 const Shop = require('../models/ShopModel');
 
@@ -46,9 +47,10 @@ router.post('/bookslot', async (req, res) => {
 
 
 
-router.patch('/api/bookingsold/:bookingId', async (req, res) => {
+router.patch('/bookingsold/:bookingId', async (req, res) => {
   try {
     const { bookingId } = req.params;
+    console.log(bookingId);
     const { sold } = req.body;
 
     console.log('Received request to update bookingId:', bookingId, 'with sold:', sold);

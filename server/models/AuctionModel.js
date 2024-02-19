@@ -8,6 +8,7 @@ const auctionSchema = new mongoose.Schema({
   qtySold: { type: Number, required: true },
   maxPrice: { type: Number, required: true },
   avgPrice: { type: Number, required: true },
+  issued: { type: Boolean, default: false },
 });
 
 const Auction = mongoose.model('Auction', auctionSchema);

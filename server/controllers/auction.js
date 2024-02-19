@@ -44,6 +44,15 @@ router.get('/getauctions', async (req, res) => {
     }
   });
   
-
+  router.get('/getauctions', async (req, res) => {
+    try {
+      const auctions = await Auction.find({ isssued: true });
+      res.status(200).json(auctions);
+    } catch (error) {
+      console.error('Error fetching auctions:', error);
+      res.status(500).json({ msg: 'Failed to fetch auctions' });
+    }
+  });
+  
 
 module.exports = router;

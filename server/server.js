@@ -21,6 +21,7 @@ const license = require("./controllers/license")
 const dealerprice = require("./controllers/dealerprice")
 
 
+
 app.use(cors());
 app.use(express.json());
 
@@ -41,7 +42,10 @@ app.use("/api/dealertable",table)
 app.use("/api/bookingdetails",table)
 app.use("/api/shopview",shopreg)
 app.use("/api/approve",shopreg)
+app.use("/api/shopviewbyid",shopreg)
 app.use("/api/dailyslot",dailyslot)
+app.use("/api/getdailyslot",dailyslot)
+app.use("/api/checkdailyslot",dailyslot)
 app.use("/api/bookslot",bookslot)
 app.use("/api/bookingsold",bookslot) 
 app.use("/api/dealerreg",dealerreg)

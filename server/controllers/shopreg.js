@@ -84,8 +84,28 @@ router.get('/shopview', async (req, res) => {
     res.status(200).json(shops);
   } catch (error) {
     console.error('Error fetching shop data:', error);
+    res.status(500).json({ msg: 'Failed to fetch shop data' }); 
+  }
+});
+
+
+router.get('/shopviewbyid/:id', async (req, res) => {
+  try {
+    const shopId = req.params.id;
+    const shop = await Shop.findById(shopId);
+    console.log(shop);
+
+    if (!shop) {
+      return res.status(404).json({ msg: 'Shop not found' });
+    }
+
+    res.status(200).json(shop);
+  } catch (error) {
+    console.error('Error fetching shop data:', error);
     res.status(500).json({ msg: 'Failed to fetch shop data' });
   }
 });
+
+module.exports = router;
 
 module.exports = router;

@@ -1,33 +1,60 @@
-// routes/dailySlot.js
+// routes/dailyslot.js
+
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const DailySlot = require('../models/DailyslotModel');
 const Shop = require('../models/ShopModel');
 
-// Get shop details and daily slots for a specific shop
-router.get('/dailyslot/:shopId', async (req, res) => {
-  const { shopId } = req.params;
-
+router.post('/dailyslot/:shopId', async (req, res) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(shopId)) {
-      return res.status(400).json({ error: 'Invalid shopId' });
+    const { shopId } = req.params;
+    const { date, availableSpiceCapacity } = req.body;
+
+    const existingSlot = await DailySlot.findOne({ shopId, date });
+    if (existingSlot) {
+      return res.status(400).json({ msg: 'Daily slot already exists for this date.' });
     }
 
-    const [shop, dailySlots] = await Promise.all([
-      Shop.findById(shopId),
-      DailySlot.find({ shop: shopId }).sort({ date: 1 }),
-    ]);
+    const newDailySlot = new DailySlot({
+      shopId,
+      date,
+      availableSpiceCapacity,
+    });
 
-    if (!shop) {
-      return res.status(404).json({ error: 'Shop not found' });
-    }
+    await newDailySlot.save();
 
-    res.json({ shop, dailySlots });
+    res.status(201).json(newDailySlot);
   } catch (error) {
-    console.error('Error fetching shop and daily slots:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error adding daily slot:', error);
+    res.status(500).json({ msg: 'Failed to add daily slot' });
   }
 });
+
+router.get('/getdailyslot/:shopId', async (req, res) => {
+  try {
+    const { shopId, date } = req.params;
+    const existingSlot = await DailySlot.findOne({ shopId, date });
+
+    res.status(200).json(existingSlot);
+  } catch (error) {
+    console.error('Error checking daily slot:', error);
+    res.status(500).json({ msg: 'Failed to check daily slot' });
+  }
+});
+
+module.exports = router;
+router.get('/checkdailyslot/:shopId/:date', async (req, res) => {
+  try {
+    const { shopId, date } = req.params;
+    const existingSlot = await DailySlot.findOne({ shopId, date });
+
+    res.status(200).json({ exists: !!existingSlot });
+  } catch (error) {
+    console.error('Error checking daily slot:', error);
+    res.status(500).json({ msg: 'Failed to check daily slot' });
+  }
+});
+
+module.exports = router;
 
 module.exports = router;

@@ -54,13 +54,25 @@ router.get('/generatelicense/:licenseid', async (req, res) => {
   
       // Create a PDF document
       const pdfDoc = new PDFDocument();
-  
-      // Set the content of the PDF
-      pdfDoc.text('Your License for Accessing the Spicesboard has been issued for');
-      pdfDoc.text(`Your License for Accessing the Spicesboard has been issued for ${licenseRequest.dealerName}`);
-      pdfDoc.text(`Email: ${licenseRequest.dealerEmail}`);
-      pdfDoc.text(`Trade Code: ${licenseRequest.tradeCode}`);
 
+      // Set the content of the PDF
+      pdfDoc
+        .fontSize(16)
+        .text('Spices Board India', { align: 'center' })
+        .moveDown(0.5)
+        .fontSize(14)
+        .text('License Issued', { align: 'center' })
+        .moveDown(1)
+        .text(`Your license for trading with Spices Board has been issued for ${licenseRequest.dealerName}`)
+        .text(`Email: ${licenseRequest.dealerEmail}`)
+        .text(`Trade Code: ${licenseRequest.tradeCode}`)
+        .text(`Shop License Number: ${licenseRequest.shopLicenseNumber}`)
+        .text(`Address: ${licenseRequest.address}`)
+        .moveDown(1)
+        .text('This license will be canceled after 1 year.')
+        .moveDown(1)
+        .text('Thank you for trading with Spices Board India.', { align: 'center' });
+  
       // Set response headers
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `inline; filename=license_${requestId}.pdf`);
@@ -70,6 +82,7 @@ router.get('/generatelicense/:licenseid', async (req, res) => {
       pdfDoc.on('data', (chunk) => pdfBuffer.push(chunk));
       pdfDoc.on('end', () => {
         const pdfData = Buffer.concat(pdfBuffer);
+  
   
         // Send email with the generated PDF as an attachment
         const nodemailer = require('nodemailer');

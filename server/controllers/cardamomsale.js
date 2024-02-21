@@ -52,12 +52,21 @@ router.post('/cardamomsale', upload.single('cardamomImage'), async (req, res) =>
 
 router.get('/cardamomsaleview', async (req, res) => {
   try {
-    const cardamomSales = await CardamomSale.find();
-    res.status(200).json(cardamomSales);
+    const sales = await CardamomSale.find({}, 'cardamomImage date amountInKg').sort({ date: -1 });
+    res.status(200).json(sales);
   } catch (error) {
-    console.error('Error fetching cardamom sales data:', error);
-    res.status(500).json({ msg: 'Failed to fetch cardamom sales data' });
+    console.error('Error fetching cardamom sales:', error);
+    res.status(500).json({ msg: 'Failed to fetch cardamom sales' });
   }
+});
+
+router.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+router.get('/get-cardamom-sale-image/:filename', (req, res) => {
+  const { filename } = req.params;
+  const filepath = path.join(__dirname, '../uploads', filename);
+  // Add logic to send the file as a response
+  res.sendFile(filepath);
 });
 
 module.exports = router;

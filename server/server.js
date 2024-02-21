@@ -19,6 +19,7 @@ const dealerreg = require("./controllers/dealerreg")
 const auction = require("./controllers/auction")
 const license = require("./controllers/license")
 const dealerprice = require("./controllers/dealerprice")
+const cardamomsale = require("./controllers/cardamomsale")
 
 
 
@@ -58,6 +59,8 @@ app.use("/api/getlicense",license)
 app.use("/api/generatelicense",license)
 app.use("/api/addprice",dealerprice)
 app.use("/api/getprice",dealerprice)
+app.use("/api/cardamomsale",cardamomsale)
+app.use("/api/cardamomsaleview",cardamomsale)
 
 mongoose.connect('mongodb://localhost:27017/Project')
   .then(() => {

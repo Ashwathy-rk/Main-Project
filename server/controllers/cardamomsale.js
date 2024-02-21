@@ -19,7 +19,7 @@ const upload = multer({ storage: storage });
 
 router.use('/uploads', express.static('uploads'));
 
-router.post('/add', upload.single('cardamomImage'), async (req, res) => {
+router.post('/cardamomsale', upload.single('cardamomImage'), async (req, res) => {
   try {
     const { amountInKg, date } = req.body;
 
@@ -46,6 +46,17 @@ router.post('/add', upload.single('cardamomImage'), async (req, res) => {
   } catch (error) {
     console.error('Error adding cardamom sale:', error);
     res.status(500).json({ msg: 'Internal Server Error' });
+  }
+});
+
+
+router.get('/cardamomsaleview', async (req, res) => {
+  try {
+    const cardamomSales = await CardamomSale.find();
+    res.status(200).json(cardamomSales);
+  } catch (error) {
+    console.error('Error fetching cardamom sales data:', error);
+    res.status(500).json({ msg: 'Failed to fetch cardamom sales data' });
   }
 });
 

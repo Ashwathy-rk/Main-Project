@@ -1,11 +1,11 @@
-// models/DailySlot.js
-
+// models/DailyslotModel.js
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const dailySlotSchema = new mongoose.Schema({
+const dailySlotSchema = new Schema({
   shopId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Shop', // Make sure it matches the model name for your shop
+    type: Schema.Types.ObjectId,
+    ref: 'Shop', // Assuming there is a Shop model
     required: true,
   },
   date: {
@@ -16,6 +16,22 @@ const dailySlotSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  slots: [
+    {
+      startTime: {
+        type: String,
+        required: true,
+      },
+      endTime: {
+        type: String,
+        required: true,
+      },
+      spiceCapacity: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 });
 
 const DailySlot = mongoose.model('DailySlot', dailySlotSchema);

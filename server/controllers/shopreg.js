@@ -93,7 +93,6 @@ router.get('/shopviewbyid/:id', async (req, res) => {
   try {
     const shopId = req.params.id;
     const shop = await Shop.findById(shopId);
-    console.log(shop);
 
     if (!shop) {
       return res.status(404).json({ msg: 'Shop not found' });

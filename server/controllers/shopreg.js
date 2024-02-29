@@ -105,6 +105,30 @@ router.get('/shopviewbyid/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+
+router.get('/shoplocation/:shopId', async (req, res) => {
+  try {
+    const { shopId } = req.params;
+
+    // Check if shopId is valid
+    if (!shopId) {
+      return res.status(400).json({ error: 'Invalid shop ID' });
+    }
+
+    // Fetch only the location of the shop by ID
+    const shop = await Shop.findById(shopId, 'location');
+
+    // Check if shop is found
+    if (!shop) {
+      return res.status(404).json({ error: 'Shop not found' });
+    }
+
+    // Respond with the location data
+    res.json({ location: shop.location });
+  } catch (error) {
+    console.error('Error fetching shop location:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;

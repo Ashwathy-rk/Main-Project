@@ -26,10 +26,6 @@ const dailySlotSchema = new Schema({
         type: String,
         required: true,
       },
-      spiceCapacity: {
-        type: Number,
-        required: true,
-      },
     },
   ],
 });

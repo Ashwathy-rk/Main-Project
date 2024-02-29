@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Booking = require('../models/BookingModel');
 const DailySlot = require('../models/DailyslotModel');
 
+
 router.post('/bookslot/:shopId', async (req, res) => {
   try {
     const {
@@ -16,6 +17,10 @@ router.post('/bookslot/:shopId', async (req, res) => {
       bookingDate,
       bookingTime,
     } = req.body;
+    console.log(address,
+      phoneNumber,
+      bookingAmount,
+      bookingAmountUnit,)
 
     // Fetch corresponding DailySlot for the given shopId and bookingDate
     const dailySlot = await DailySlot.findOne({
@@ -23,34 +28,25 @@ router.post('/bookslot/:shopId', async (req, res) => {
       date: bookingDate,
     });
 
+    console.log(dailySlot);
+
     if (!dailySlot) {
       return res.status(404).json({ error: 'DailySlot not found' });
     }
 
-    // Find the relevant slot within the DailySlot based on bookingTime
-    const slotIndex = dailySlot.slots.findIndex((slot) => {
-      const slotStartTime = new Date(`${bookingDate} ${slot.startTime}`);
-      const slotEndTime = new Date(`${bookingDate} ${slot.endTime}`);
-      const bookingDateTime = new Date(`${bookingDate} ${bookingTime}`);
-
-      return bookingDateTime >= slotStartTime && bookingDateTime <= slotEndTime;
-    });
-
-    if (slotIndex === -1) {
-      return res.status(404).json({ error: 'Slot not found in DailySlot' });
-    }
-
-    // Update availableSpiceCapacity by reducing it according to bookingAmount
-    const updatedDailySlots = [...dailySlot.slots];
     const spiceReduction = bookingAmountUnit === 'kg' ? bookingAmount : bookingAmount / 1000;
-    updatedDailySlots[slotIndex].spiceCapacity -= spiceReduction;
 
-    dailySlot.availableSpiceCapacity -= spiceReduction;
-    dailySlot.slots = updatedDailySlots;
 
-    // Save the updated DailySlot to the database
-    await dailySlot.save();
-
+    dailySlot.availableSpiceCapacity = dailySlot.availableSpiceCapacity - spiceReduction;
+ 
+    try{
+      console.log(dailySlot, "K");
+      await dailySlot.save();
+  
+    } catch (error){
+      console.log(error);
+    }
+   
     // Save the booking details
     const newBooking = new Booking({
       userId,
@@ -65,13 +61,13 @@ router.post('/bookslot/:shopId', async (req, res) => {
 
     const savedBooking = await newBooking.save();
 
-    res.json(savedBooking);
+    // Return the updated dailySlot in the response
+    res.json({ booking: savedBooking, updatedDailySlot: dailySlot });
   } catch (error) {
     console.error('Error creating booking:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 
 

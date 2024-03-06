@@ -1,0 +1,140 @@
+/*header section*/
+
+.hero_area {
+  height: 98vh;
+  background-image: url("../../../public/hero.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.sub_page .hero_area {
+  height: auto;
+}
+
+.hero_area.sub_pages {
+  height: auto;
+}
+
+.header_section .container-fluid {
+  padding-right: 25px;
+  padding-left: 25px;
+}
+
+.custom_nav-container.navbar-expand-lg {
+  justify-content: center;
+}
+
+.custom_nav-container.navbar-expand-lg .navbar-nav .nav-link {
+  padding: 10px 30px;
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+a,
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: initial;
+}
+
+.btn,
+.btn:focus {
+  outline: none !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* Updated styles to center 'AROMA' */
+/* Updated styles to center 'AROMA' */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand img {
+  width: 45px;
+  margin-right: 5px; /* Adjust the right margin if needed */
+}
+
+.navbar-brand span {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: "Ethnocentric";
+  display: inline-block; /* Add this line */
+}
+
+
+.custom_nav-container .nav_search-btn {
+  background-image: url("../../../public/search-icon.png");
+  background-size: 22px;
+  background-repeat: no-repeat;
+  background-position-y: 7px;
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  border: none;
+}
+
+.custom_nav-container {
+  z-index: 99999;
+  padding: 15px 0;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.custom_nav-container .navbar-toggler {
+  outline: none;
+}
+
+.custom_nav-container .navbar-toggler .navbar-toggler-icon {
+  background-image: url("../../../public/menu.png");
+  background-size: 35px;
+}
+
+.hero_section {
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 75%;
+}
+
+.hero_section h1 {
+  font-size: 85px;
+  display: flex;
+  justify-content: space-between;
+  width: 85%;
+  margin: 0 auto;
+}
+
+.hero_section .hero_btn-box a {
+  display: inline-block;
+  padding: 12px 55px;
+  background-color: transparent;
+  border: 1.5px solid #ffffff;
+  color: #ffffff;
+  margin-top: 55px;
+  text-transform: uppercase;
+}
+
+.hero_section .hero_btn-box a:hover {
+  background-color: #ffffff;
+  color: #00ff00;
+}
+
+.sub_page .about_section .about_container {
+  margin-top: 0;
+}

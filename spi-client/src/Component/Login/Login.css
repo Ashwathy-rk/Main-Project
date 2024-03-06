@@ -1,0 +1,58 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: url('../../../public/hero.jpg') center/cover; /* Replace 'your-image-url.jpg' with your image file path */
+}
+
+  
+
+
+.login-form {
+  width: 400px; /* Increase the width */
+  padding: 40px; /* Increase the padding */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px; /* Increase the border-radius for rounded corners */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Add box shadow for depth */
+}
+
+.form-group {
+  margin-bottom: 20px; /* Increase the margin */
+}
+
+label {
+  display: block;
+  margin-bottom: 10px; /* Increase the margin */
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 12px; /* Increase the padding */
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px; /* Increase the border-radius */
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 15px; /* Increase the padding */
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 6px; /* Increase the border-radius */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  margin-bottom: 15px;
+}

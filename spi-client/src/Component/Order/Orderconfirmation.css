@@ -1,0 +1,41 @@
+/* OrderConfirmation.css */
+
+.order-confirmation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url('../../../public/info-bg.jpg'); /* Replace with your background image URL */
+  background-size: cover;
+  color: rgb(51, 12, 12); /* Text color */
+  text-align: center;
+}
+
+.order-details-box {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  max-width: 1000px;
+  margin: 20px;
+  background-color: #84e487; /* Set the background color to green */
+}
+
+.order-details {
+  margin-top: 20px;
+}
+
+.order-items-list {
+  list-style: none;
+  padding: 0;
+}
+
+.place-order-button {
+  margin-top: 20px;
+  background-color: #111811;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+}

@@ -1,0 +1,63 @@
+/* DealerRegistration.css */
+
+.dealer-registration-container {
+    background-image: url('../../../public/register.jpg');
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: brightness(0.7); /* Adjust the brightness for the shaded effect on the background image */
+  }
+  
+  .registration-form-container {
+    background-color: rgba(255, 255, 255, 0.95); /* Increase opacity for a more solid white box */
+    padding: 30px; /* Adjust the padding for more space inside the box */
+    border-radius: 12px; /* Increase border-radius for rounded corners */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Increase box-shadow for a lighter effect */
+    width: 500px; /* Adjust the width as needed */
+  }
+  
+  .registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Increase gap for more space between form elements */
+  }
+  
+  .registration-form label {
+    font-weight: bold;
+  }
+  
+  .registration-form input,
+  .registration-form textarea {
+    width: 100%;
+    padding: 10px; /* Adjust padding for larger input fields */
+    border: 1px solid #ccc;
+    border-radius: 6px; /* Adjust border-radius for slightly rounded edges */
+    transition: border-color 0.3s; /* Smooth transition for highlighting */
+  }
+  
+  .registration-form input:focus,
+  .registration-form textarea:focus {
+    border-color: #007bff; /* Highlight border color on focus */
+  }
+  
+  .registration-form button {
+    width: 100%;
+    padding: 12px; /* Adjust padding for larger button */
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px; /* Adjust border-radius for slightly rounded button */
+    cursor: pointer;
+  }
+  
+  .registration-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .registration-form .invalid-feedback {
+    color: #dc3545;
+    margin-top: 8px; /* Adjust margin-top for more space between error message and input */
+  }
+  

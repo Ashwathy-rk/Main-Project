@@ -1,0 +1,98 @@
+.navbar {
+    transition: all 0.3s 0s;
+}
+
+.navbar .nav-link {
+    font-weight: navbar-nav-link-font-weight;
+}
+
+.navbar .nav-link.active {
+    color: pink;
+}
+
+.custom-navbar {
+    min-height: 140px;
+}
+
+@media (max-width: 992px) {
+    .custom-navbar {
+        min-height: auto !important;
+        padding: navbar-padding-y;
+        background-color: gray-800;
+    }
+
+    .custom-navbar .collapse {
+        flex-basis: 0 !important;
+    }
+
+    .custom-navbar .navbar-nav,
+    .custom-navbar .navbar-brand {
+        width: 100%;
+    }
+
+    .custom-navbar .navbar-nav:last-child {
+        justify-content: flex-end;
+    }
+
+    .custom-navbar .navbar-brand {
+        display: none !important;
+    }
+}
+
+.affix {
+    min-height: 80px;
+    background: gray-800;
+    border-bottom: 1px solid gray-700;
+}
+
+.affix .navbar-brand .brand-img {
+    transform: translateY(-30px);
+    opacity: 0;
+    width: 50px;
+}
+
+.affix .navbar-brand .brand-txt {
+    opacity: 1;
+    bottom: 50%;
+}
+
+.header {
+    height: 100vh;
+    max-height: 900px;
+    /* background: url("../../../public/main.jpg") no-repeat center center fixed; */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 750px;
+}
+
+.header .overlay {
+    height: 100%;
+    background: rgba(gray-900, .85);
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.header-title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    opacity: .8;
+    color: dark;
+}
+
+.header-mini {
+    min-height: 24rem;
+    height: 24rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    background: lighten(primary, 25%) !important;
+}

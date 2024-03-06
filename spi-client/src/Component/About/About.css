@@ -1,0 +1,57 @@
+
+.about_section .about_container {
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 75px 45px;
+    background-image: url("../../../public/about.jpg");
+    background-size: auto 100%;
+    background-color: #fff;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-top: -150px;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.21);
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.21);
+  }
+  
+  .about_section .about_container .container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+  
+  .about_section .about_container .container > div {
+    width: 46%;
+  }
+  
+  .about_section .detail a {
+    display: inline-block;
+    padding: 14px 35px;
+    background-color: transparent;
+    border: 1.5px solid #00ff00;
+    color: #00ff00;
+    color: #3cff3c;
+    margin-top: 75%;
+  }
+  
+  .about_section .detail a:hover {
+    background-color: #00ff00;
+    color: #ffffff;
+  }
+  
+  .about_section .detail-2 {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+  }
+  

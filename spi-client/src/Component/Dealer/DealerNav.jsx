@@ -52,8 +52,6 @@ const DealerNav = ({ isSidebarOpen, setIsSidebarOpen }) => {
         View Cardamom Sale
       </Typography>
     </Button>
-
-
     <div>
       <Button onClick={handleLogout} sx={{ fontSize: '15px', color: theme.palette.secondary[100] }}>
         Logout

@@ -28,7 +28,7 @@ router.post('/cardamomsale', upload.single('cardamomImage'), async (req, res) =>
       return res.status(400).json({ error: 'Amount in Kg and Date are required' });
     }
 
-    // Get the path of the uploaded cardamom image
+    
     const cardamomImagePath = req.file.path;
     const slicedPath = cardamomImagePath.slice(cardamomImagePath.indexOf('uploads/cardamomSale') + 1);
 

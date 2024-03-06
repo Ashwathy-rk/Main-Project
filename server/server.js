@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 const port = 5000;
+const Razorpay = require('razorpay');
+const bodyParser = require('body-parser');
+const { v4: uuidv4 } = require('uuid');
 
 const Users = require('./models/UserModel')
 
@@ -20,6 +23,7 @@ const auction = require("./controllers/auction")
 const license = require("./controllers/license")
 const dealerprice = require("./controllers/dealerprice")
 const cardamomsale = require("./controllers/cardamomsale")
+const payment = require("./controllers/payment")
 
 
 
@@ -32,6 +36,7 @@ app.use("/api/moredetails",moredetails)
 app.use("/api/order",order)
 app.use("/get-product-image/:filename",productview)
 app.use("/api/add-to-cart",addtocart)
+app.use("/api/clear-cart",addtocart)
 app.use("/api/cart",addtocart)
 app.use("/api/remove",addtocart)
 app.use("/api/shop",table)
@@ -44,6 +49,8 @@ app.use("/api/bookingdetails",table)
 app.use("/api/shopview",shopreg)
 app.use("/api/approve",shopreg)
 app.use("/api/shopviewbyid",shopreg)
+// app.use("/api/create-order",payment)
+// app.use("/api/verify-payment",payment)
 app.use("/api/shoplocation",shopreg)
 app.use("/api/dailyslot",dailyslot)
 app.use("/api/getdailyslot",dailyslot)
@@ -71,6 +78,40 @@ mongoose.connect('mongodb://localhost:27017/Project')
   });
 
 
+
+  app.use(bodyParser.json());
+
+  const razorpay = new Razorpay({
+    key_id: 'rzp_test_QCVPmuBwOiEzBI',      // Replace with your Razorpay Key ID
+    key_secret: 'JFZYLJBq9hPDYf3TRVBDKaA1',  // Replace with your Razorpay Key Secret
+  });
+  
+  // Your existing server logic...
+  
+  // Razorpay integration for creating an order
+  let orderIdCounter = 1; // Initialize a simple order ID counter
+
+  app.post('/api/create-order', async (req, res) => {
+    console.log('Received create order request:', req.body);
+    const { amount, currency } = req.body;
+    console.log(amount);  
+    try {
+      const orderOptions = {
+        amount: amount * 100,
+        currency,
+        receipt: `order_${orderIdCounter}`,
+      };
+  
+      const order = await razorpay.orders.create(orderOptions);
+      orderIdCounter += 1;
+  
+      res.json({ orderId: order.id });
+    } catch (error) {
+      console.error('Error creating order:', error);
+      res.status(500).json({ error: 'Failed to create order' });
+    }
+  });
+  
 
 
 // Registration for Customer

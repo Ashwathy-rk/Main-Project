@@ -30,6 +30,7 @@ router.post('/shopreg', upload.single('shopLicense'), async (req, res) => {
       location,
       address,
       spiceCapacity,
+      parchingPrice,
     } = req.body;
 
     const shopLicensePath = req.file.path;
@@ -44,6 +45,7 @@ router.post('/shopreg', upload.single('shopLicense'), async (req, res) => {
       location,
       address,
       spiceCapacity,
+      parchingPrice,
       approved: false,
     });
 
@@ -55,6 +57,8 @@ router.post('/shopreg', upload.single('shopLicense'), async (req, res) => {
     res.status(500).json({ msg: 'Shop registration failed' });
   }
 });
+
+
 
 router.patch('/approve/:shopId', async (req, res) => {
   try {

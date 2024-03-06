@@ -9,6 +9,7 @@ const shopSchema = new mongoose.Schema({
   location: { type: String, required: true },
   address: { type: String, required: true },
   spiceCapacity: { type: String, required: true }, // Add the new field
+  parchingPrice: { type: String, required: true },
   approved: { type: Boolean, default: false },
 });
 

@@ -13,10 +13,10 @@ router.post('/add-to-cart', async (req, res) => {
 
   try {
     // Check if the product exists
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId);   
     
     if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
+      return res.status(404).json({ error: 'Product not found' });  
     }
 
     // Create or find the cart
@@ -87,6 +87,26 @@ router.delete('/remove/:productId', async (req, res) => {
   }
 });
 
+
+
+router.delete('/clear-cart', async (req, res) => {
+  try {
+    const cart = await Cart.findOne();
+    
+    if (!cart) {
+      return res.status(404).json({ error: 'Cart not found' });
+    }
+
+    // Clear all items from the cart
+    cart.items = [];
+    await cart.save();
+
+    res.json(cart);
+  } catch (error) {
+    console.error('Error clearing cart:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 module.exports = router;

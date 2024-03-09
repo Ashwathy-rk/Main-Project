@@ -7,6 +7,7 @@ const productSchema = new mongoose.Schema({
   provider: { type: String, required: true },
   price: { type: Number, required: true },
   description: { type: String },
+  stock: { type: Number, default: 0 }, // Add stock field with default value 0
 });
 
 const Product = mongoose.model('Product', productSchema);

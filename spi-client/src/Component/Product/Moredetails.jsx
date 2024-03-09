@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Moredetails.css'
-
+import './Moredetails.css';
 
 const MoreDetails = () => {
   const { productId } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [customQuantity, setCustomQuantity] = useState(''); // Added custom quantity state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,13 +26,15 @@ const MoreDetails = () => {
 
   const handleAddToCart = async () => {
     try {
+      const selectedQuantity = customQuantity !== '' ? parseInt(customQuantity, 10) : quantity;
+
       const response = await axios.post('http://localhost:5000/api/add-to-cart/add-to-cart', {
         productId: productId,
-        quantity: quantity,
+        quantity: selectedQuantity,
       });
 
       console.log('Item added to cart:', response.data);
-      alert(`Added ${quantity} items to cart.`);
+      alert(`Added ${selectedQuantity} items to cart.`);
     } catch (error) {
       console.error('Error adding to cart:', error);
       alert('Error adding to cart. Please try again.');
@@ -40,40 +42,41 @@ const MoreDetails = () => {
   };
 
   const handleOrderNow = () => {
-    const totalCost = productDetails?.price * quantity;
-  
+    const totalCost = productDetails?.price * (customQuantity !== '' ? parseInt(customQuantity, 10) : quantity);
+
     const orderDetails = {
       items: [
         {
           productName: productDetails?.productName,
-          quantity,
+          quantity: customQuantity !== '' ? parseInt(customQuantity, 10) : quantity,
           price: productDetails?.price,
         },
       ],
       totalAmount: totalCost,
     };
-  
+
     navigate('/orderconfirmation', {
       state: {
-        orderDetails: orderDetails,  // Ensure orderDetails is passed correctly
+        orderDetails: orderDetails,
         productDetails: productDetails,
-        quantity: quantity,
+        quantity: customQuantity !== '' ? parseInt(customQuantity, 10) : quantity,
       },
     });
   };
-  
 
   const handleGoBack = () => {
     navigate(-1);
   };
 
   const handleQuantityChange = (e) => {
-    setQuantity(parseInt(e.target.value, 10));
-  };
+    const selectedQuantity = e.target.value;
+    setQuantity(selectedQuantity);
 
-  if (!productDetails) {
-    return <div>Loading...</div>;
-  }
+    // Clear custom quantity when selecting a predefined option
+    if (selectedQuantity !== 'more') {
+      setCustomQuantity('');
+    }
+  };
 
   return (
     <div className="more-details-container">
@@ -98,15 +101,28 @@ const MoreDetails = () => {
             <strong>Description:</strong> {productDetails.description}
           </div>
           <div className="quantity-container">
-  <div className="quantity-label">Quantity:</div>
-  <select value={quantity} onChange={handleQuantityChange} className="quantity-select">
-    {[1, 2, 3, 4, 5].map((option) => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ))}
-  </select>
-</div>
+          <div className="quantity-container">
+          <div className="quantity-label">Quantity:</div>
+          <select value={quantity} onChange={handleQuantityChange} className="quantity-select">
+            {[1, 2, 3, 4, 5, 'more'].map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+
+          {/* Show text field for custom quantity when 'more' is selected */}
+          {quantity === 'more' && (
+            <input
+              type="text"
+              placeholder="Enter quantity"
+              value={customQuantity}
+              onChange={(e) => setCustomQuantity(e.target.value)}
+              className="custom-quantity-input"
+            />
+          )}
+        </div>
+      </div>
 
         </div>
       </div>

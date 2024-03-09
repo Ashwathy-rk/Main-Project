@@ -8,6 +8,7 @@ const AddProduct = () => {
   const [provider, setProvider] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
+  const [stock, setStock] = useState(''); // Added stock state
   const [imageFile, setImageFile] = useState(null);
 
   const handleImageChange = (e) => {
@@ -30,6 +31,7 @@ const AddProduct = () => {
       formData.append('provider', provider);
       formData.append('price', price);
       formData.append('description', description);
+      formData.append('stock', stock); // Added stock to the form data
 
       const response = await axios.post('http://localhost:5000/api/products/products', formData);
 
@@ -41,6 +43,7 @@ const AddProduct = () => {
       setProvider('');
       setPrice('');
       setDescription('');
+      setStock(''); // Reset stock after submission
 
       setImageFile(null);
     } catch (error) {
@@ -75,6 +78,11 @@ const AddProduct = () => {
         <label>
           Price:
           <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} />
+        </label>
+
+        <label>
+          Stock: {/* Added input for stock */}
+          <input type="text" value={stock} onChange={(e) => setStock(e.target.value)} />
         </label>
 
         <label>

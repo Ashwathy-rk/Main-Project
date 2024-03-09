@@ -56,6 +56,7 @@ const DealerNav = ({ isSidebarOpen, setIsSidebarOpen }) => {
       <Button onClick={handleLogout} sx={{ fontSize: '15px', color: theme.palette.secondary[100] }}>
         Logout
       </Button>
+      
     </div>
   </Toolbar>
 </AppBar>

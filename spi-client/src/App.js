@@ -80,7 +80,7 @@ function App() {
             <Route path="/productview" element={<ProductViewPage/>} />
             <Route path="/moredetails/:productId" element={<MoredetailsPage />} />
             <Route path="/order" element={<OrderPage/>} />
-            <Route path="/orderconfirmation" element={<OrderPage />}/>
+            <Route path="/orderconfirmation/:productId" element={<OrderPage />}/>
             <Route path="/customer" element={<CustomerPage />}/>
             <Route path="/addtocart" element={<AddtocartPage />}/>
             <Route path="/landowner" element={<LandownerPage />}/>

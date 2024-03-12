@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Orderconfirmation.css';
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { productId } = useParams(); // Fetch the product ID from the URL parameters
   const [formattedDate, setFormattedDate] = useState('');
-
   const { orderDetails } = location?.state || {};
+  console.log('ProductId from URL:', productId);
 
   useEffect(() => {
     if (orderDetails && orderDetails.items) {
@@ -34,11 +35,26 @@ const OrderConfirmation = () => {
       );
     }
   }, [orderDetails]);
-
   const handlePlaceOrder = async () => {
     try {
       if (orderDetails && orderDetails.items && orderDetails.totalAmount) {
+        // Map order items to include productId
+        const orderItems = orderDetails.items.map(item => {
+          if (!productId) {
+            console.error('ProductId is missing in an item:', item);
+          }
+  
+          return {
+            productId: productId,
+            quantity: item.quantity,
+            price: item.price,
+            productName:item.productName,
+          };
+        });
+
+        console.log(orderItems )
         const orderResponse = await axios.post('http://localhost:5000/api/create-order', {
+          items: orderItems,
           amount: orderDetails.totalAmount,
           currency: 'INR',
         });
@@ -54,7 +70,7 @@ const OrderConfirmation = () => {
           order_id: orderId,
           handler: function (response) {
             console.log('Payment Successful:', response);
-            axios.post('http://localhost:5000/api/order/order', { ...orderDetails, paymentDetails: response })
+            axios.post(`http://localhost:5000/api/order/order/${productId}`, { ...orderDetails,orderItems, paymentDetails: response })
               .then(() => {
                 navigate('productview');
                 alert('Order placed successfully');

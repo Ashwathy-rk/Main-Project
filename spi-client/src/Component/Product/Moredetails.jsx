@@ -1,4 +1,3 @@
-// Moredetails.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,7 +7,8 @@ const MoreDetails = () => {
   const { productId } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [customQuantity, setCustomQuantity] = useState(''); // Added custom quantity state
+  const [customQuantity, setCustomQuantity] = useState('');
+  const [stock, setStock] = useState(0); // Added stock state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +16,8 @@ const MoreDetails = () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/moredetails/moredetails/${productId}`);
         setProductDetails(response.data);
+        setStock(response.data.stock); // Assuming the server response includes a 'stock' property
+        console.log(response.data.stock);
       } catch (error) {
         console.error('Error fetching product details:', error);
       }
@@ -23,6 +25,9 @@ const MoreDetails = () => {
 
     fetchProductDetails();
   }, [productId]);
+
+
+  
 
   const handleAddToCart = async () => {
     try {
@@ -55,7 +60,7 @@ const MoreDetails = () => {
       totalAmount: totalCost,
     };
 
-    navigate('/orderconfirmation', {
+    navigate(`/orderconfirmation/${productId}`, {  // Pass productId to the order confirmation page
       state: {
         orderDetails: orderDetails,
         productDetails: productDetails,
@@ -63,6 +68,7 @@ const MoreDetails = () => {
       },
     });
   };
+
 
   const handleGoBack = () => {
     navigate(-1);
@@ -77,6 +83,10 @@ const MoreDetails = () => {
       setCustomQuantity('');
     }
   };
+
+  if (!productDetails) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="more-details-container">
@@ -100,7 +110,9 @@ const MoreDetails = () => {
           <div>
             <strong>Description:</strong> {productDetails.description}
           </div>
-          <div className="quantity-container">
+          <div className="stock-info">
+            <strong>Stock:</strong> {stock}
+          </div>
           <div className="quantity-container">
           <div className="quantity-label">Quantity:</div>
           <select value={quantity} onChange={handleQuantityChange} className="quantity-select">
@@ -121,8 +133,7 @@ const MoreDetails = () => {
               className="custom-quantity-input"
             />
           )}
-        </div>
-      </div>
+          </div>
 
         </div>
       </div>

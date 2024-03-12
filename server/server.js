@@ -23,7 +23,7 @@ const auction = require("./controllers/auction")
 const license = require("./controllers/license")
 const dealerprice = require("./controllers/dealerprice")
 const cardamomsale = require("./controllers/cardamomsale")
-const payment = require("./controllers/payment")
+
 
 
 

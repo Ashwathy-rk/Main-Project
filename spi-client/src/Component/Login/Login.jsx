@@ -35,10 +35,12 @@ const Login = () => {
           navigate('/parcher');
         } else if (response.data.user.user.role === 'dealer') {
           navigate('/dealer');
-        }
+        } 
 
         localStorage.setItem('user', JSON.stringify(response.data.user));
         localStorage.setItem('role',JSON.stringify(response.data.user.user.role));
+        localStorage.setItem('loggedDealer', response.data.user.dealer);
+        localStorage.setItem('loggedEmail', response.data.user.email);
 
         console.log('response',response.data.user.user.role)
       } else {

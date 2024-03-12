@@ -27,6 +27,8 @@ const MoreDetails = () => {
   }, [productId]);
 
 
+
+  
   const handleAddToCart = async () => {
     try {
       const selectedQuantity = customQuantity !== '' ? parseInt(customQuantity, 10) : quantity;

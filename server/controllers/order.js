@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/OrderModel');
 const Product = require('../models/ProductModel');
+const User = require('../models/UserModel')
 
 // Route for placing an order
 router.post('/order/:productId', async (req, res) => {
   const { totalAmount, orderItems } = req.body;
+  const { userId, userName } = orderItems[0];
   const productId = req.params.productId; // Extract productId from URL params
   console.log(req.body)
 
@@ -16,10 +18,13 @@ router.post('/order/:productId', async (req, res) => {
     }
 
     // Create a new order instance
-    const newOrder = new Order({ totalAmount });
+    const newOrder = new Order({ totalAmount,userId, userName });
+    console.log(userId, userName)
 
     // Map order items to include productId
     const mappedOrderItems = orderItems.map(item => ({
+      userName:item.userName,
+      userId:item,userId,
       productId: item.productId,
       quantity: item.quantity,
       price: item.price,
@@ -61,3 +66,23 @@ router.post('/order/:productId', async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+router.get('/orderhis', async (req, res) => {
+  const userId = req.query.userId; // Extract userId from query parameters
+  try {
+    // Find the user by userId
+    const user = await User.findById(userId).populate('orders');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ orders: user.orders });
+  } catch (error) {
+    console.error('Error fetching orders:', error.message);
+    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+  }
+});
+
+module.exports = router;
+

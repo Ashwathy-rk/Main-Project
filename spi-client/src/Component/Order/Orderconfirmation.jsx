@@ -37,6 +37,15 @@ const OrderConfirmation = () => {
   }, [orderDetails]);
   const handlePlaceOrder = async () => {
     try {
+      const userId = JSON.parse(localStorage.getItem('userId'));
+const userName = JSON.parse(localStorage.getItem('username'));
+
+
+      if (!userId || !userName) {
+        console.error('User details not found in localStorage.');
+        return;
+      }
+
       if (orderDetails && orderDetails.items && orderDetails.totalAmount) {
         // Map order items to include productId
         const orderItems = orderDetails.items.map(item => {
@@ -49,6 +58,8 @@ const OrderConfirmation = () => {
             quantity: item.quantity,
             price: item.price,
             productName:item.productName,
+            userId:userId,
+            userName:userName,
           };
         });
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
   orderDate: { type: Date, default: Date.now },
+ 
   items: [
     {
       productId: {
@@ -19,6 +20,15 @@ const orderSchema = new mongoose.Schema({
       },
       productName: {
         type: String,  // Add this line if productName is required in your schema
+        required: true,
+      },
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User model
+        required: true,
+      },
+      userName: {
+        type: String,
         required: true,
       },
     },

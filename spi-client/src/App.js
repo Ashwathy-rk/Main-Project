@@ -55,6 +55,7 @@ import ShopLocationMap from "./Component/Map";
 import RazorpayPayment from "./Component/Payment/Razorpay";
 import Chat from "./Component/Chat";
 import Chat1 from "./Component/Chat1";
+import OrderHistory from "./Component/Order/Orderhistory";
 
 
 
@@ -110,6 +111,7 @@ function App() {
             <Route path="/saleview" element={<CardamomSaleView />}/>
             <Route path="/shoplocation/:shopId" element={<ShopLocationMap />}/>
             <Route path="/payment" element={<RazorpayPayment />}/>
+            <Route path="/orderhistory" element={<OrderHistory/>}/>
             <Route path="/chat" element={<Chat />}/>
             <Route path="/chat1" element={<Chat1 />}/>
           </Routes>

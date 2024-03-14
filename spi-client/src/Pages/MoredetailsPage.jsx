@@ -4,7 +4,7 @@ import CustomNavbar from '../Component/Customer/CustomNavbar'
 
 
 function MoredetailsPage() {
-  return (
+  return (  
     <div>
       <CustomNavbar/>
       <MoreDetails/>

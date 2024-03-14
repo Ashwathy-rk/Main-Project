@@ -3,6 +3,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Orderconfirmation.css';
 
+
 const OrderConfirmation = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,11 +36,11 @@ const OrderConfirmation = () => {
       );
     }
   }, [orderDetails]);
+
   const handlePlaceOrder = async () => {
     try {
       const userId = JSON.parse(localStorage.getItem('userId'));
-const userName = JSON.parse(localStorage.getItem('username'));
-
+      const userName = JSON.parse(localStorage.getItem('username'));
 
       if (!userId || !userName) {
         console.error('User details not found in localStorage.');
@@ -47,7 +48,6 @@ const userName = JSON.parse(localStorage.getItem('username'));
       }
 
       if (orderDetails && orderDetails.items && orderDetails.totalAmount) {
-        // Map order items to include productId
         const orderItems = orderDetails.items.map(item => {
           if (!productId) {
             console.error('ProductId is missing in an item:', item);
@@ -63,7 +63,15 @@ const userName = JSON.parse(localStorage.getItem('username'));
           };
         });
 
-        console.log(orderItems )
+        console.log(orderItems);
+
+        // Check stock before placing the order
+        const availableStock = await axios.get(`http://localhost:5000/api/productstock/${productId}`);
+        if (availableStock.data.stock <= 0) {
+          alert('Sorry, the product is out of stock.');
+          return;
+        }
+
         const orderResponse = await axios.post('http://localhost:5000/api/create-order', {
           items: orderItems,
           amount: orderDetails.totalAmount,
@@ -119,7 +127,6 @@ const userName = JSON.parse(localStorage.getItem('username'));
       alert('An error occurred while placing the order.');
     }
   };
-
   return (
     <div className="order-confirmation-container">
       <div className="order-details-box">

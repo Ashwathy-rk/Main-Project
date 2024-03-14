@@ -1,5 +1,4 @@
 // components/OrderHistory.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -12,8 +11,10 @@ const OrderHistory = () => {
       console.error('User ID not found in localStorage');
       return;
     }
+
     axios.get(`http://localhost:5000/api/orderhis/orderhis?userId=${userId}`)
       .then(response => {
+        console.log('Orders:', response.data.orders); // Log received orders
         setOrders(response.data.orders);
       })
       .catch(error => {
@@ -40,7 +41,6 @@ const OrderHistory = () => {
                 </li>
               ))}
             </ul>
-            {/* Display other order details */}
           </li>
         ))}
       </ul>

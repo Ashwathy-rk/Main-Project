@@ -33,6 +33,7 @@ const ProductView = () => {
                 <Link to={`/moredetails/${product._id}`}>
                   <img
                     className="img-fluid w-100"
+                    style={{ height: '200px', width: '200px' }} // Set a fixed height and width for the images
                     src={`http://localhost:5000/get-product-image/get-product-image/get-product-image/${product.productImage}`}
                     alt={product.productName}
                   />
@@ -49,12 +50,6 @@ const ProductView = () => {
                 <div className="d-flex align-items-center justify-content-center mt-2">
                   <h5>{product.price}</h5>
                 </div>
-                {/* <div className="d-flex align-items-center justify-content-center mb-1">
-                  {[1, 2, 3, 4, 5].map((star, i) => (
-                    <small key={i} className={`fa fa-star${i < product.rating ? ' text-primary' : ' far'}`}></small>
-                  ))}
-                  <small>({product.reviews})</small>
-                </div> */}
               </div>
             </div>
           </div>
@@ -65,5 +60,3 @@ const ProductView = () => {
 };
 
 export default ProductView;
-
-

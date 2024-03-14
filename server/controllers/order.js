@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/OrderModel');
 const Product = require('../models/ProductModel');
-const User = require('../models/UserModel')
+const Users = require('../models/UserModel')
 
 // Route for placing an order
 router.post('/order/:productId', async (req, res) => {
@@ -11,12 +11,12 @@ router.post('/order/:productId', async (req, res) => {
   const productId = req.params.productId; // Extract productId from URL params
   console.log(req.body)
 
+
   try {
     // Validate the structure of the request payload
     if (!Array.isArray(orderItems) || orderItems.length === 0) {
       throw new Error('Invalid order items provided.');
     }
-
     // Create a new order instance
     const newOrder = new Order({ totalAmount,userId, userName });
     console.log(userId, userName)
@@ -24,7 +24,7 @@ router.post('/order/:productId', async (req, res) => {
     // Map order items to include productId
     const mappedOrderItems = orderItems.map(item => ({
       userName:item.userName,
-      userId:item,userId,
+      userId:item.userId,
       productId: item.productId,
       quantity: item.quantity,
       price: item.price,
@@ -69,18 +69,52 @@ module.exports = router;
 
 
 
+
+
 router.get('/orderhis', async (req, res) => {
   const userId = req.query.userId; // Extract userId from query parameters
+  console.log('User ID:', userId);
+
   try {
-    // Find the user by userId
-    const user = await User.findById(userId).populate('orders');
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    // Find orders associated with the user
+    const orders = await Order.find({  userId });
+    console.log("Orders:", orders);
+    
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: 'No orders found for the user' });
     }
-    res.status(200).json({ orders: user.orders });
+    
+    res.status(200).json({ orders: orders });
   } catch (error) {
     console.error('Error fetching orders:', error.message);
     res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+  }
+});
+
+
+module.exports = router;
+
+
+
+
+
+
+// Get product stock by ID
+router.get('/:productId', async (req, res) => {
+  try {
+    const productId = req.params.productId; // Extract productId from URL parameters
+
+    // Find the product by ID and project only the stock field
+    const product = await Product.findById(productId, 'stock');
+    
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.json({ stock: product.stock });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 

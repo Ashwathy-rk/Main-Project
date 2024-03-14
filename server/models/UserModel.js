@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     enum: ['customer', 'landowner', 'dealer', 'admin','parcher'],
     default: 'customer',
   },
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
 });
 
 const Users = mongoose.model('Users', userSchema);

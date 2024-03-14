@@ -56,6 +56,7 @@ import RazorpayPayment from "./Component/Payment/Razorpay";
 import Chat from "./Component/Chat";
 import Chat1 from "./Component/Chat1";
 import OrderHistory from "./Component/Order/Orderhistory";
+import OrderTablePage from "./Component/Tables/Ordertable";
 
 
 
@@ -83,7 +84,7 @@ function App() {
             <Route path="/order" element={<OrderPage/>} />
             <Route path="/orderconfirmation/:productId" element={<OrderPage />}/>
             <Route path="/customer" element={<CustomerPage />}/>
-            <Route path="/addtocart" element={<AddtocartPage />}/>
+            <Route path="/addtocart/:productId" element={<AddtocartPage />}/>
             <Route path="/landowner" element={<LandownerPage />}/>
             <Route path="/parcher" element={<ParcherPage />}/>
             <Route path="/shopreg" element={<ShopRegistrationPage />}/>
@@ -112,6 +113,7 @@ function App() {
             <Route path="/shoplocation/:shopId" element={<ShopLocationMap />}/>
             <Route path="/payment" element={<RazorpayPayment />}/>
             <Route path="/orderhistory" element={<OrderHistory/>}/>
+            <Route path="/orderdetails" element={<OrderTablePage/>}/>
             <Route path="/chat" element={<Chat />}/>
             <Route path="/chat1" element={<Chat1 />}/>
           </Routes>

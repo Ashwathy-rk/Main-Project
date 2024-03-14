@@ -8,7 +8,7 @@ const Product = require('../models/ProductModel'); // Import the Product model
 
 
 // Route to add an item to the cart
-router.post('/add-to-cart', async (req, res) => {
+router.post('/add-to-cart/:productId', async (req, res) => {
   const { productId, quantity } = req.body;
 
   try {
@@ -48,7 +48,7 @@ router.post('/add-to-cart', async (req, res) => {
 
 
 
-router.get('/cart', async (req, res) => {
+router.get('/cart/:productId', async (req, res) => {
   try {
     const cart = await Cart.findOne().populate('items.product'); // Populate the product details
     res.json(cart || { items: [] }); // Return an empty array if the cart is not found

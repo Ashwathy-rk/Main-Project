@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
+import './Dailyslot.css';
 
 const DailySlot = () => {
   const { shopId } = useParams();
@@ -28,57 +29,36 @@ const DailySlot = () => {
   }, [shopId]);
 
   useEffect(() => {
-    const createDefaultSlots = async () => {
+    const fetchDailySlots = async () => {
       try {
-        if (shop) {
-          // Check if daily slots already exist for the current week
-          const response = await axios.get(`http://localhost:5000/api/getdailyslot/getdailyslot/${shopId}`);
-          const existingSlots = response.data;
-  
-          if (existingSlots.length === 0) {
-            const currentDate = new Date();
-            const defaultSlots = [];
-  
-            for (let i = 0; i < 7; i++) {
-              const date = new Date(currentDate);
-              date.setDate(currentDate.getDate() + i);
-  
-              const startTime = '09:00 AM';
-              const endTime = '05:00 PM';
-  
-              const slot = {
-                date: date.toISOString(),
-                slots: [
-                  {
-                    startTime,
-                    endTime,
-                  },
-                ],
-             
-              };
-  
-              defaultSlots.push(slot);
-            }
-  
-            setDailySlots(defaultSlots);
-  
-            // Save the daily slots to the database
-            await axios.post(`http://localhost:5000/api/dailyslot/dailyslot/${shopId}`, { slots: defaultSlots });
-          } else {
-            setDailySlots(existingSlots);
-          }
-        }
+        const response = await axios.get(`http://localhost:5000/api/getdailyslot/getdailyslot/${shopId}`);
+        setDailySlots(response.data);
       } catch (error) {
-        console.error('Error creating or fetching default slots:', error);
+        console.error('Error fetching daily slots:', error);
       }
     };
-  
-    createDefaultSlots();
-  }, [shop, shopId]);
-  
- 
 
-  const handleBooking = (date, bookingAmount, bookingAmountUnit) => {
+    fetchDailySlots();
+  }, [shopId]);
+
+  const fetchAvailableCapacity = async (date) => {
+    try {
+      const formattedDate = new Date(date).toISOString();
+      console.log('Formatted Date:', formattedDate);// Convert date to ISO string format
+      const response = await axios.get(`http://localhost:5000/api/availablecapacity/availablecapacity/${shopId}/${formattedDate}`);
+
+      console.log(response.data.availableCapacity);
+      return response.data.availableCapacity;
+  
+    } catch (error) {
+      console.error('Error fetching available capacity:', error);
+      return null;
+    }
+    
+  };
+  
+
+  const handleBooking = async (date, bookingAmount, bookingAmountUnit) => {
     try {
       const spiceReduction = bookingAmountUnit === 'kg' ? bookingAmount : bookingAmount / 1000;
 
@@ -101,45 +81,51 @@ const DailySlot = () => {
 
       setDailySlots(updatedDailySlots);
 
+      // Fetch updated available capacity after booking
+      const availableCapacity = await fetchAvailableCapacity(date);
+
       // Navigate to booking page after updating capacity
-      navigateToBookingPage(date);
+      navigateToBookingPage(date, availableCapacity);
     } catch (error) {
       console.error('Error updating state and submitting booking:', error);
     }
   };
 
-  const navigateToBookingPage = (date) => {
+  const navigateToBookingPage = (date, availableCapacity) => {
     // Replace this with your actual navigation logic
     window.location.href = `/bookslot/${shopId}/${date}`;
   };
 
   return (
-    <div className="container-fluid pt-5 pb-3">
+    <div className="dailyslot-container ">
       <h2 className="text-center mb-4">Daily Slots</h2>
 
-      {Array.isArray(dailySlots) && dailySlots.length > 0 ? (
-        dailySlots.map((dailySlot) => (
-          <div key={dailySlot.date} className="card mb-4">
-            <div className="card-body">
-              <h3 className="card-title">Date: {new Date(dailySlot.date).toLocaleDateString()}</h3>
-              <p>Total Capacity: {dailySlot.availableSpiceCapacity}</p>
-              <ul className="list-unstyled">
-                {dailySlot.slots.map((slot, index) => (
-                  <li key={`${dailySlot.date}-${index}`} className="mb-2">
-                    <Link
-                      to={`/bookslot/${shopId}/${dailySlot.date}`}
+      {dailySlots.map((dailySlot) => (
+        <div key={dailySlot.date} className="card mb-4">
+          <div className="card-body">
+            <h3 className="card-title">Date: {new Date(dailySlot.date).toLocaleDateString()}</h3>
+            <ul className="list-unstyled">
+              {dailySlot.slots.map((slot, index) => (
+                <li key={`${dailySlot.date}-${index}`} className="mb-3">
+                  <div className="slot-info">
+                    <div>
+                      <p className="mb-0">Time: {slot.startTime} - {slot.endTime}</p>
+                      <p className="mb-0">Available Capacity: {dailySlot.availableSpiceCapacity}</p>
+                    </div>
+                    <button
                       onClick={() => handleBooking(dailySlot.date, 1, 'kg')}
-                      className="btn btn-primary"
+                      className="btn btn-primary btn-sm" // Add btn-sm class for smaller button
                     >
-                      {slot.startTime} - {slot.endTime}, Available Spice Capacity: {slot.availableSpiceCapacity}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                      Book Now
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        ))
-      ) : (
+        </div>
+      ))}
+      {dailySlots.length === 0 && (
         <div className="alert alert-warning">No daily slots available.</div>
       )}
     </div>

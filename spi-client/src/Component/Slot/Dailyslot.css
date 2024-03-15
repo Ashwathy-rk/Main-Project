@@ -1,0 +1,19 @@
+.dailyslot-container {
+    background-image: url('../../../public/about.jpg');
+    background-size: cover; /* Cover the entire container */
+    background-position: center; /* Center the background image */
+  }
+  
+.slot-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .slot-info button {
+    padding: 0.25rem 0.5rem; /* Adjust padding for smaller button */
+    font-size: 0.8rem; /* Reduce font size */
+    margin-left: 10px;
+    width: auto; /* Set width to auto to make the button adjust its size based on content */
+  }
+  

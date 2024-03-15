@@ -1,4 +1,3 @@
-// routes/dailyslot.js
 const express = require('express');
 const router = express.Router();
 const DailySlot = require('../models/DailyslotModel');
@@ -36,6 +35,7 @@ router.post('/dailyslot/:shopId', async (req, res) => {
             {
               startTime: '09:00 AM',
               endTime: '05:00 PM',
+              availableSpiceCapacity: shop.spiceCapacity, // Set initial available capacity for each slot
             },
           ],
         });
@@ -56,9 +56,6 @@ router.post('/dailyslot/:shopId', async (req, res) => {
   }
 });
 
-module.exports = router;
-
-
 router.get('/getdailyslot/:shopId', async (req, res) => {
   try {
     const { shopId } = req.params;
@@ -77,3 +74,8 @@ router.get('/getdailyslot/:shopId', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
+
+module.exports = router;

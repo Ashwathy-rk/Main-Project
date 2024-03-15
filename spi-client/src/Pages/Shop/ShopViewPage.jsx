@@ -6,7 +6,7 @@ function ShopViewPage() {
   return (
     <div>
       <Navbar />
-        <ShopView/>
+      <ShopView/>
       
     </div>
   )

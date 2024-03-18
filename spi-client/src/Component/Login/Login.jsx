@@ -39,6 +39,9 @@ const Login = () => {
 
         localStorage.setItem('user', JSON.stringify(response.data.user));
         localStorage.setItem('role',JSON.stringify(response.data.user.user.role));
+        localStorage.setItem('name',JSON.stringify(response.data.user.user.name));
+        localStorage.setItem('email',JSON.stringify(response.data.user.user.email));
+        localStorage.setItem('address',JSON.stringify(response.data.user.user.address));
         localStorage.setItem('userId',JSON.stringify(response.data.user.user._id));
         localStorage.setItem('username',JSON.stringify(response.data.user.user.username));
         localStorage.setItem('loggedDealer', response.data.user.dealer);

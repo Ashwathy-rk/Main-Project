@@ -94,16 +94,11 @@ router.get('/orderhis', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
   }
 });
-
-
 // Route to fetch current order
-router.get('/:orderId', async (req, res) => {
-  try
-  {
+router.get('/current/:orderId', async (req, res) => {
+  try {
     const orderId = req.params.orderId;
-
-    // Fetch the latest order for the current user including user details
-    const order = await Order.findOne({ orderId }).sort({ orderDate: -1 });
+    const order = await Order.findOne({ _id: orderId }).sort({ orderDate: -1 });
 
     if (!order) {
       return res.status(404).json({ message: 'No order found for the current user.' });
@@ -115,9 +110,6 @@ router.get('/:orderId', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
-
 
 
 // Get product stock by ID
@@ -139,9 +131,5 @@ router.get('/:productId', async (req, res) => {
   }
 });
 
+
 module.exports = router;
-
-
-
-
-

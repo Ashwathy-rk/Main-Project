@@ -69,11 +69,15 @@ const OrderConfirmation = () => {
 
         // Check stock before placing the order
         const availableStock = await axios.get(`http://localhost:5000/api/productstock/${productId}`);
+        const orderedQuantity = orderDetails.items.reduce((total, item) => total + item.quantity, 0);
+        
         if (availableStock.data.stock <= 0) {
           alert('Sorry, the product is out of stock.');
           return;
+        } else if (orderedQuantity > availableStock.data.stock) {
+          alert('Sorry, the ordered quantity exceeds the available stock.');
+          return;
         }
-
         const orderResponse = await axios.post('http://localhost:5000/api/create-order', {
           items: orderItems,
           amount: orderDetails.totalAmount,

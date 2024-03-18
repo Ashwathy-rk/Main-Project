@@ -57,6 +57,7 @@ import Chat from "./Component/Chat";
 import Chat1 from "./Component/Chat1";
 import OrderHistory from "./Component/Order/Orderhistory";
 import OrderTablePage from "./Component/Tables/Ordertable";
+import Invoice from "./Component/Order/Bill";
 
 
 
@@ -116,6 +117,7 @@ function App() {
             <Route path="/orderdetails" element={<OrderTablePage/>}/>
             <Route path="/chat" element={<Chat />}/>
             <Route path="/chat1" element={<Chat1 />}/>
+            <Route path="/bill" element={<Invoice />}/>
           </Routes>
           </UserProvider>
           </ThemeProvider>

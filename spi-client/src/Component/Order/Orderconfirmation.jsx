@@ -12,6 +12,8 @@ const OrderConfirmation = () => {
   const { orderDetails } = location?.state || {};
   console.log('ProductId from URL:', productId);
 
+  const [orderPlaced, setOrderPlaced] = useState(false);
+
   useEffect(() => {
     if (orderDetails && orderDetails.items) {
       const dateOptions = {
@@ -78,7 +80,19 @@ const OrderConfirmation = () => {
           currency: 'INR',
         });
 
-        const orderId = orderResponse.data.id;
+        const order_Id = orderResponse.data.id;
+
+        const paymentResponse = await axios.post('http://localhost:5000/api/save-payment', {
+        userId: userId,
+        orderId: order_Id,
+        amount: orderDetails.totalAmount,
+        currency: 'INR',
+        // Add other payment details such as razorpayOrderId, razorpayPaymentId, etc.
+      });
+
+      console.log('Payment details saved:', paymentResponse.data);
+
+      // localStorage.setItem('orderId', orderId);
 
         const options = {
           key: 'rzp_test_QCVPmuBwOiEzBI',
@@ -86,14 +100,22 @@ const OrderConfirmation = () => {
           currency: 'INR',
           name: 'Your Company',
           description: 'Payment for Order',
-          order_id: orderId,
+          order_id: order_Id,
           handler: function (response) {
             console.log('Payment Successful:', response);
-            axios.post(`http://localhost:5000/api/order/order/${productId}`, { ...orderDetails,orderItems, paymentDetails: response })
-              .then(() => {
-                navigate('productview');
-                alert('Order placed successfully');
-              })
+            axios.post(`http://localhost:5000/api/order/order/${productId}`, { ...orderDetails, orderItems, paymentDetails: response })
+  .then(response => {
+    setOrderPlaced(true);
+    console.log('Order placed successfully', response.data);
+    const orderId=response.data.orderId;
+    localStorage.setItem('orderId', orderId);
+
+    alert('Order placed successfully');
+  })
+  
+
+              
+
               .catch((error) => {
                 console.error('Error placing order:', error);
                 alert('An error occurred while placing the order.');
@@ -123,10 +145,19 @@ const OrderConfirmation = () => {
         alert('Invalid order details. Unable to place the order.');
       }
     } catch (error) {
+      setOrderPlaced(true);
+
       console.error('Error placing order:', error);
       alert('An error occurred while placing the order.');
     }
   };
+
+  const handleGetBill = () => {
+    navigate('/bill');
+    // Handle get bill logic here
+    alert('Get Bill functionality goes here');
+  };
+
   return (
     <div className="order-confirmation-container">
       <div className="order-details-box">
@@ -162,9 +193,18 @@ const OrderConfirmation = () => {
         </div>
 
         <div style={{ marginTop: '20px' }}>
-          <button onClick={handlePlaceOrder} className="place-order-button">
-            Place Order
-          </button>
+          {/* Conditionally render the "Place Order" button */}
+          {!orderPlaced && (
+            <button onClick={handlePlaceOrder} className="place-order-button">
+              Place Order
+            </button>
+          )}
+          {/* Conditionally render the "Get Bill" button after order placement */}
+          {orderPlaced && (
+            <button onClick={handleGetBill} className="get-bill-button">
+              Get Bill
+            </button>
+          )}
         </div>
       </div>
     </div>

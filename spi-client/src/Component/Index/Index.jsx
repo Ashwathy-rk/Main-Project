@@ -22,9 +22,9 @@ function Index() {
                 <Nav className="ml-auto flex-column flex-lg-row align-items-center">
                   <Nav.Link href="index.html">Home</Nav.Link>
                   <Nav.Link href="about.html">About</Nav.Link>
-                  {/* <Nav.Link href="product.html">Product</Nav.Link> */}
-                  <Nav.Link href="client.html">Client</Nav.Link>
-                  <Nav.Link href="contact.html">Contact us</Nav.Link>
+                  <Nav.Link as={Link} to="/contactus" className="btn btn-outline-light mr-3">
+                    Contact Us
+                  </Nav.Link>
                   <Nav.Link as={Link} to="/login" className="btn btn-outline-light mr-3">
                     Login
                   </Nav.Link>

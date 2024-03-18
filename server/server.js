@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 
 const Users = require('./models/UserModel')
+const Payment = require('./models/PaymentModel')
 
 const product = require("./controllers/product")
 const productview = require("./controllers/productview")
@@ -34,6 +35,7 @@ app.use("/api/productview",productview)
 app.use("/api/products",product)
 app.use("/api/moredetails",moredetails)
 app.use("/api/order",order)
+app.use("/api/current",order)
 app.use("/api/orderhis",order)
 app.use("/api/productstock",order)
 app.use("/get-product-image/:filename",productview)
@@ -108,13 +110,42 @@ mongoose.connect('mongodb://localhost:27017/Project')
       const order = await razorpay.orders.create(orderOptions);
       orderIdCounter += 1;
   
-      res.json({ orderId: order.id });
+      res.json({ order_Id: order.id });
     } catch (error) {
       console.error('Error creating order:', error);
       res.status(500).json({ error: 'Failed to create order' });
     }
   });
   
+
+
+  app.post('/api/save-payment', async (req, res) => {
+    try {
+      // Extract payment details from the request body
+      const { userId, orderId, amount, currency, razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
+  
+      // Create a new payment document
+      const payment = new Payment({
+        user: userId, // Assuming 'user' is a reference to the User model
+        amount: amount,
+        currency: currency,
+
+        status: 'success', // Assuming the payment was successful
+      });
+  
+      // Save the payment to the database
+      await payment.save();
+  
+      // Send a success response
+      res.status(201).json({ message: 'Payment details saved successfully', payment: payment });
+    } catch (error) {
+      console.error('Error saving payment:', error);
+      // Send an error response
+      res.status(500).json({ message: 'Failed to save payment details', error: error.message });
+    }
+  });
+  
+   
 
 
 // Registration for Customer

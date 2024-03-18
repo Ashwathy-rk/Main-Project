@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/OrderModel');
 const Product = require('../models/ProductModel');
-const Users = require('../models/UserModel')
+const Payment = require('../models/PaymentModel')
+
 
 // Route for placing an order
 router.post('/order/:productId', async (req, res) => {
@@ -58,6 +59,9 @@ router.post('/order/:productId', async (req, res) => {
   
     await newOrder.save();
 
+
+    // Assuming you have already imported necessary modules and model
+
     res.status(201).json({ message: 'Order placed successfully!', orderId: newOrder._id });
   } catch (error) {
     console.error('Error placing order:', error.message);
@@ -92,8 +96,25 @@ router.get('/orderhis', async (req, res) => {
 });
 
 
-module.exports = router;
+// Route to fetch current order
+router.get('/:orderId', async (req, res) => {
+  try
+  {
+    const orderId = req.params.orderId;
 
+    // Fetch the latest order for the current user including user details
+    const order = await Order.findOne({ orderId }).sort({ orderDate: -1 });
+
+    if (!order) {
+      return res.status(404).json({ message: 'No order found for the current user.' });
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error('Error fetching current order:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 
@@ -119,4 +140,8 @@ router.get('/:productId', async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
 

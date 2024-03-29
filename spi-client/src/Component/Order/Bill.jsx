@@ -1,24 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { PDFDownloadLink, PDFViewer, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { PDFDownloadLink, Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 
 // Styled components
 const Container = styled.div`
   font-family: Arial, sans-serif;
-`;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  background-color: #f0f0f0;
-`;
-
-const Logo = styled.img`
-  width: 100px;
-  height: auto;
 `;
 
 const Main = styled.main`
@@ -50,10 +37,6 @@ const InvoiceInfo = styled.div`
 
 const DateInfo = styled.div`
   font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const InvoiceNumber = styled.div`
   margin-bottom: 10px;
 `;
 
@@ -119,7 +102,7 @@ const Invoice = () => {
   const [address, setAddress] = useState('');
   const [invoiceDate, setInvoiceDate] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [grandTotal, setGrandTotal] = useState(0); // Initialize grand total state
+  const [grandTotal, setGrandTotal] = useState(0);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -129,27 +112,23 @@ const Invoice = () => {
         const fetchedOrderDetails = response.data;
         setOrderDetails(fetchedOrderDetails);
 
-        // Fetch name and email from localStorage
         const storedName = localStorage.getItem('name');
         const storedEmail = localStorage.getItem('email');
-        const storedAddress = loacalStorage.getItem('address')
+        const storedAddress = localStorage.getItem('address');
         setName(storedName);
         setEmail(storedEmail);
         setAddress(storedAddress);
 
-        // Set the date of the invoice to the current system date and time
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleString();
         setInvoiceDate(formattedDate);
 
-        // Set the due date as one week later
         const dueDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // Adding one week in milliseconds
         const formattedDueDate = dueDate.toLocaleString();
         setDueDate(formattedDueDate);
 
-        // Calculate grand total
         let total = 0;
-        orderDetails.items.forEach(item => {
+        fetchedOrderDetails.items.forEach(item => {
           total += item.price * item.quantity;
         });
         setGrandTotal(total);
@@ -161,20 +140,66 @@ const Invoice = () => {
     };
 
     fetchOrderDetails();
-  }, [orderDetails]); // Add orderDetails to the dependency array to recalculate grand total when orderDetails change
+  }, []);
 
   // PDF Document component
   const InvoiceDocument = () => (
     <Document>
       <Page style={styles.page}>
         <View style={styles.section}>
-          <Text>Invoice</Text>
+          <Text style={styles.title}>Invoice</Text>
+          <View style={styles.detailsContainer}>
+            <View style={styles.clientInfo}>
+              <InvoiceTo>INVOICE TO:</InvoiceTo>
+              <Text>User Name: {name}</Text>
+              <Text>User Address: {address}</Text>
+              <Email>Email: {email}</Email>
+            </View>
+            <View style={styles.invoiceInfo}>
+              <DateInfo>Date of Invoice: {invoiceDate}</DateInfo>
+              <Text>Due Date: {dueDate}</Text>
+            </View>
+          </View>
+          <Table style={styles.table}>
+            <TableHeader>
+              <TableHeaderRow>
+                <TableHeaderCell>#</TableHeaderCell>
+                <TableHeaderCell>Description</TableHeaderCell>
+                <TableHeaderCell>Unit Price</TableHeaderCell>
+                <TableHeaderCell>Quantity</TableHeaderCell>
+                <TableHeaderCell>Total</TableHeaderCell>
+              </TableHeaderRow>
+            </TableHeader>
+            <TableBody>
+              {orderDetails.items.map((item, index) => (
+                <TableRow key={index} style={index % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    <Text>{item.productName}</Text>
+                    <Text>{item.description}</Text>
+                  </TableCell>
+                  <TableCell>{item.price.toFixed(2)}</TableCell>
+                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell>{(item.price * item.quantity).toFixed(2)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <tfoot>
+              <TotalRow>
+                <TotalCell colSpan={3}>GRAND TOTAL</TotalCell>
+                <TotalCell>{grandTotal.toFixed(2)}</TotalCell>
+              </TotalRow>
+            </tfoot>
+          </Table>
+          <Thanks>Thank you!</Thanks>
+          <Notices>
+            <Notice>{orderDetails.notice}</Notice>
+          </Notices>
         </View>
       </Page>
     </Document>
   );
 
-  // Styles for PDF
   const styles = StyleSheet.create({
     page: {
       flexDirection: 'row',
@@ -185,12 +210,57 @@ const Invoice = () => {
       padding: 10,
       flexGrow: 1,
     },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      textAlign: 'center',
+    },
+    detailsContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+    },
+    clientInfo: {
+      flex: 1,
+    },
+    invoiceInfo: {
+      flex: 1,
+    },
+    table: {
+      width: '100%',
+    },
+    tableHeaderRow: {
+      backgroundColor: '#f0f0f0',
+    },
+    tableHeaderCell: {
+      padding: 10,
+      textAlign: 'left',
+    },
+    tableRowEven: {
+      backgroundColor: '#f9f9f9',
+    },
+    tableRowOdd: {
+      backgroundColor: '#fff',
+    },
+    tableCell: {
+      padding: 10,
+    },
+    totalRow: {
+      fontWeight: 'bold',
+    },
+    thanks: {
+      marginTop: 20,
+      fontStyle: 'italic',
+    },
+    notice: {
+      marginTop: 20,
+    },
   });
 
   if (loading) {
     return <div>Loading...</div>;
   }
-
   return (
     <Container>
       <Main>
@@ -242,11 +312,11 @@ const Invoice = () => {
           <Notice>{orderDetails.notice}</Notice>
         </Notices>
       </Main>
-      <Footer>
+      {/* <Footer>
         <PDFDownloadLink document={<InvoiceDocument />} fileName="invoice.pdf">
           {({ blob, url, loading, error }) => ('Download PDF')}
         </PDFDownloadLink>
-      </Footer>
+      </Footer> */}
     </Container>
   );
 };

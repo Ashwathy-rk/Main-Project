@@ -69,48 +69,18 @@ router.post('/order/:productId', async (req, res) => {
   }
 });
 
-module.exports = router;
 
 
-
-
-
-router.get('/orderhis', async (req, res) => {
-  const userId = req.query.userId; // Extract userId from query parameters
-  console.log('User ID:', userId);
-
+router.get('/ordering/:userId', async (req, res) => {
   try {
-    // Find orders associated with the user
-    const orders = await Order.find({  userId });
-    console.log("Orders:", orders);
-    
-    if (!orders || orders.length === 0) {
-      return res.status(404).json({ message: 'No orders found for the user' });
-    }
-    
-    res.status(200).json({ orders: orders });
+    const userId = req.params.userId;
+    const orders = await Order.find({ 'items.userId': userId }).populate('items.productId');
+    res.json(orders);
   } catch (error) {
-    console.error('Error fetching orders:', error.message);
-    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-// Route to fetch current order
-router.get('/current/:orderId', async (req, res) => {
-  try {
-    const orderId = req.params.orderId;
-    const order = await Order.findOne({ _id: orderId }).sort({ orderDate: -1 });
-
-    if (!order) {
-      return res.status(404).json({ message: 'No order found for the current user.' });
-    }
-
-    res.json(order);
-  } catch (error) {
-    console.error('Error fetching current order:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
 
 // Get product stock by ID
 router.get('/:productId', async (req, res) => {

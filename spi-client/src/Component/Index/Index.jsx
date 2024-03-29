@@ -47,25 +47,6 @@ function Index() {
             </Navbar>
           </div>
         </header>
-        {/* end header section */}
-        {/* hero section */}
-        <section className="hero_section">
-          <div className="hero_detail">
-            <h1>
-              <span style={{ marginRight: '200px' }}>S</span>
-              <span style={{ marginRight: '200px' }}>P</span>
-              <span style={{ marginRight: '200px' }}>I</span>
-              <span style={{ marginRight: '200px' }}>C</span>
-              <span style={{ marginRight: '200px' }}>E</span>
-              <span>S</span>
-            </h1>
-            <h3>Natural products</h3>
-          </div>
-          <div className="hero_btn-box">
-            <a href="/">Contact Us</a>
-          </div>
-        </section>
-        {/* end hero section */}
       </div>
     </div>
   );

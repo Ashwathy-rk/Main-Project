@@ -182,7 +182,7 @@ const OrderConfirmation = () => {
               orderDetails.items &&
               orderDetails.items.map((item, index) => (
                 <li key={index}>
-                  {item.productName} - Quantity: {item.quantity} - Price: ${item.price}
+                  {item.productName} - Quantity: {item.quantity} - Price: {item.price}
                 </li>
               ))}
           </ul>
@@ -191,7 +191,7 @@ const OrderConfirmation = () => {
         <div className="total-amount">
           {orderDetails && orderDetails.totalAmount && (
             <div>
-              <strong>Total Amount:</strong> ${orderDetails.totalAmount}
+              <strong>Total Amount:</strong> {orderDetails.totalAmount}
             </div>
           )}
         </div>

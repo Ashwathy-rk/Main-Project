@@ -13,8 +13,7 @@ function About() {
           About Us
         </h2>
         <p>
-          It is a long established fact that a reader will be distracted by the readable content of a page when
-          looking at its layout. The point of g it
+        Spices are aromatic substances derived from various parts of plants such as seeds, bark, roots, or fruits, and are used to flavor and enhance the taste of food. They have been an integral part of human civilization for centuries, prized for their ability to transform dishes with their unique flavors, colors, and aromas. 
         </p>
         <div>
           <a href>
@@ -24,8 +23,7 @@ function About() {
       </div>
       <div className="detail-2">
         <p>
-          It is a long established fact that a reader will be distracted by the readable content of a page when
-          looking at its layout. The point of g it
+        Spices are aromatic substances derived from various parts of plants such as seeds, bark, roots, or fruits, and are used to flavor and enhance the taste of food. They have been an integral part of human civilization for centuries, prized for their ability to transform dishes with their unique flavors, colors, and aromas. 
         </p>
       </div>
     </div>

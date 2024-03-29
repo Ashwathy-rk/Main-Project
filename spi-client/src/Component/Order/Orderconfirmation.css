@@ -1,41 +1,43 @@
-/* OrderConfirmation.css */
-
 .order-confirmation-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-image: url('../../../public/info-bg.jpg'); /* Replace with your background image URL */
+  min-height: 100vh;
+  background-image: url('../../../public/order.jpg');
   background-size: cover;
-  color: rgb(51, 12, 12); /* Text color */
+  color: rgb(51, 12, 12);
   text-align: center;
 }
 
 .order-details-box {
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  max-width: 1000px;
-  margin: 20px;
-  background-color: #84e487; /* Set the background color to green */
+  padding: 60px; /* Increased padding for the order details box */
+  border-radius: 20px; /* Increased border radius for a smoother appearance */
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Increased box shadow for better depth */
+  max-width: 95%; /* Adjusted max-width for responsiveness */
+  margin: 30px; /* Increased margin for better spacing */
+  background-color: #84e487;
 }
 
 .order-details {
-  margin-top: 20px;
+  margin-top: 30px; /* Adjusted margin for better spacing */
+  font-size: 20px; /* Increased font size for better readability */
 }
 
 .order-items-list {
   list-style: none;
   padding: 0;
+  margin-top: 20px; /* Adjusted margin for better spacing between items */
+  text-align: left;
 }
 
 .place-order-button {
-  margin-top: 20px;
+  margin-top: 40px; /* Increased margin for better spacing */
   background-color: #111811;
   color: white;
-  padding: 10px;
+  padding: 20px 40px; /* Increased padding for larger button */
   cursor: pointer;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px; /* Increased border radius for a smoother appearance */
+  font-size: 24px; /* Increased font size for larger button text */
 }

@@ -38,6 +38,12 @@ const CustomNavbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             View Products
           </Typography>
         </Button>
+        
+        <Button component={Link} to="/orderhistory">
+          <Typography fontWeight="bold" fontSize="1.0rem" sx={{ color: theme.palette.secondary[100] }}>
+            Order History
+          </Typography>
+        </Button>
         <Button component={Link} to={`/addtocart/${productId}`}>
           <Typography fontWeight="bold" fontSize="1.0rem" sx={{ color: theme.palette.secondary[100] }}>
             Your Cart

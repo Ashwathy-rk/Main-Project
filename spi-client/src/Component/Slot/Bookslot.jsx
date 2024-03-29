@@ -124,7 +124,8 @@ const BookingPage = () => {
       const response = await axios.post(`http://localhost:5000/api/bookslot/bookslot/${shopId}`, bookingDetails);
 
       console.log('Booking Details:', response.data);
-      alert('Booking successful');
+  alert('Booking successful');
+
       
       // Additional logic for "Pay on Delivery" option
       if (e.target.name === 'payOnDelivery') {

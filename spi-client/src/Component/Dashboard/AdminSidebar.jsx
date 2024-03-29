@@ -58,13 +58,14 @@ const navItems = [
     icon: <PublicOutlined />,
   },
   {
-    text: "BookingDetails",
+    text: "Orderdetails",
     icon: <PublicOutlined />,
   },
   {
-    text: "Orderdetails",
-    icon: null,
+    text: "BookingDetails",
+    icon: <PublicOutlined />,
   },
+  
   {
     text: "Overview",
     icon: <PointOfSaleOutlined />,

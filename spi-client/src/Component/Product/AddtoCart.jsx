@@ -5,6 +5,8 @@ import './AddtoCart.css';
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
+  const [selectedQuantities, setSelectedQuantities] = useState({});
+  const [quantityType, setQuantityType] = useState('grams'); // Default quantity type
   const navigate = useNavigate();
   const { productId } = useParams(); // Fetch the product ID from the URL parameters
 
@@ -13,6 +15,12 @@ const CartPage = () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/cart/cart/${productId}`);
         setCart(response.data);
+        // Initialize selectedQuantities object with default values
+        const quantities = {};
+        response.data.items.forEach((item) => {
+          quantities[item.product._id] = { grams: 0, kilograms: 0 };
+        });
+        setSelectedQuantities(quantities);
       } catch (error) {
         console.error('Error fetching cart:', error);
       }
@@ -31,10 +39,17 @@ const CartPage = () => {
     }
   };
 
+  const handleQuantityChange = (e, productId) => {
+    const { value, name } = e.target;
+    setSelectedQuantities({
+      ...selectedQuantities,
+      [productId]: { ...selectedQuantities[productId], [name]: value }
+    });
+  };
+
   const handleBuyNow = async () => {
     try {
       console.log('Buy Now clicked');
-  
       // Fetch userId and userName from localStorage
       const userId = localStorage.getItem('userId');
       const userName = localStorage.getItem('username');
@@ -52,7 +67,7 @@ const CartPage = () => {
       const orderItems = cart.items.map((item) => ({
         productName: item.product.productName,
         price: item.product.price,
-        quantity: item.quantity,
+        quantity: quantityType === 'grams' ? selectedQuantities[item.product._id].grams : selectedQuantities[item.product._id].kilograms,
         userId: userId,
         userName: userName,
       }));
@@ -63,7 +78,10 @@ const CartPage = () => {
         return;
       }
   
-      const totalAmount = cart.items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+      const totalAmount = cart.items.reduce((total, item) => {
+        const quantity = quantityType === 'grams' ? selectedQuantities[item.product._id].grams : selectedQuantities[item.product._id].kilograms;
+        return total + item.product.price * quantity;
+      }, 0);
   
       const orderDetails = {
         items: orderItems,
@@ -85,25 +103,68 @@ const CartPage = () => {
       console.error('Error navigating to order confirmation page:', error);
     }
   };
-  
 
   if (!cart) {
     return <div>Loading cart...</div>;
   }
 
-  const totalAmount = cart.items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  const totalAmount = cart.items.reduce((total, item) => {
+    const quantity = quantityType === 'grams' ? selectedQuantities[item.product._id].grams : selectedQuantities[item.product._id].kilograms;
+    return total + item.product.price * quantity;
+  }, 0);
 
   return (
     <div className="cart-container">
       <h2>Your Cart</h2>
+      <div>
+        <label>
+          <input
+            type="radio"
+            name="quantityType"
+            value="grams"
+            checked={quantityType === 'grams'}
+            onChange={(e) => setQuantityType(e.target.value)}
+          />
+          Grams
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="quantityType"
+            value="kilograms"
+            checked={quantityType === 'kilograms'}
+            onChange={(e) => setQuantityType(e.target.value)}
+          />
+          Kilograms
+        </label>
+      </div>
       {cart.items.map((item) => (
         <div key={item.product._id} className="cart-item">
-          <p>Product: {item.product.productName}</p>
-          <p>Quantity: {item.quantity}</p>
-          <button onClick={() => handleRemoveItem(item.product._id)}>Remove</button>
+          <div className="product-details">
+            <img
+              src={`http://localhost:5000/get-product-image/get-product-image/get-product-image/${item.product.productImage}`}
+              alt={item.product.productName}
+              className="product-image"
+            />
+            <div>
+              <p><strong>Product:</strong> {item.product.productName}</p>
+              <p><strong>Price:</strong> {item.product.price}</p>
+              <p><strong>Quantity:</strong>
+                <input
+                  type="number"
+                  value={quantityType === 'grams' ? selectedQuantities[item.product._id].grams : selectedQuantities[item.product._id].kilograms}
+                  name={quantityType}
+                  onChange={(e) => handleQuantityChange(e, item.product._id)}
+                />
+              </p>
+            </div>
+          </div>
+          <div>
+            <button onClick={() => handleRemoveItem(item.product._id)}>Remove</button>
+          </div>
         </div>
       ))}
-      <p className="total-amount">Total Amount: ${totalAmount.toFixed(2)}</p>
+      <p className="total-amount">Total Amount: {totalAmount.toFixed(2)}</p>
       <button className="buy-now-button" onClick={handleBuyNow}>Buy Now</button>
     </div>
   );

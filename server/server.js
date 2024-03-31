@@ -20,10 +20,10 @@ const table = require("./controllers/table")
 const dailyslot = require("./controllers/dailyslot")
 const bookslot = require("./controllers/bookslot")
 const dealerreg = require("./controllers/dealerreg")
-const auction = require("./controllers/auction")
+
 const license = require("./controllers/license")
-const dealerprice = require("./controllers/dealerprice")
-const cardamomsale = require("./controllers/cardamomsale")
+
+const delivery = require("./controllers/delivery")
 
 
 
@@ -35,6 +35,7 @@ app.use("/api/productview",productview)
 app.use("/api/products",product)
 app.use("/api/moredetails",moredetails)
 app.use("/api/order",order)
+app.use("/api/orders",order)
 app.use("/api/ordering",order)
 app.use("/api/productstock",order)
 app.use("/get-product-image/:filename",productview)
@@ -63,15 +64,13 @@ app.use("/api/bookingsold",bookslot)
 app.use("/api/dealerreg",dealerreg)
 app.use("/api/dealerview",dealerreg)
 app.use("/api/approvedealer",dealerreg)
-app.use("/api/addauction",auction)
-app.use("/api/getauctions",auction)
+
 app.use("/api/licenserequest",license)
 app.use("/api/getlicense",license)
 app.use("/api/generatelicense",license)
-app.use("/api/addprice",dealerprice)
-app.use("/api/getprice",dealerprice)
-app.use("/api/cardamomsale",cardamomsale)
-app.use("/api/cardamomsaleview",cardamomsale)
+
+app.use("/api/delivery",delivery)
+
 
 mongoose.connect('mongodb://localhost:27017/Project')
   .then(() => {
@@ -350,5 +349,116 @@ app.post('/api/reset-password', async (req, res) => {
   } catch (error) {
     console.error("Error resetting password:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+// const axios = require('axios');
+
+// app.get('/cardamom-price', async (req, res) => {
+//   try {
+//     const response = await axios.get('https://www.indianspices.com/marketing/price/domestic/daily-price.html');
+//     const html = response.data;
+
+//     // Parse HTML string into a DOM document
+//     const parser = new DOMParser();
+//     const doc = parser.parseFromString(html, 'text/html');
+
+//     // Find the cardamom price element
+//     const cardamomPriceElement = doc.getElementById('domesticDailyPrice')
+//       .getElementsByClassName('price-list-content')[0]
+//       .getElementsByTagName('tr')[1] // Assuming cardamom price is the second row
+//       .getElementsByTagName('td')[2]; // Assuming price is in the third column
+
+//     // Extract the price text
+//     const cardamomPrice = cardamomPriceElement.textContent.trim();
+
+//     res.json({ price: cardamomPrice });
+//   } catch (error) {
+//     console.error('Error fetching cardamom price:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+
+
+// const { createProxyMiddleware } = require('http-proxy-middleware');
+
+// // Set up proxy middleware
+// app.use('/priceadd', createProxyMiddleware({
+//   target: 'https://www.indianspices.com',
+//   changeOrigin: true,
+//   pathRewrite: {
+//     '^/priceadd': '/marketing/price/domestic/daily-price.html', // Adjust path as needed
+//   },
+// }));
+
+// app.listen(3001, () => {
+//   console.log('Proxy server running on port 3001');
+// });
+
+
+// const axios = require('axios');
+// // Fetch data from external website
+// axios.get('https://www.indianspices.com/marketing/price/domestic/daily-price.html')
+//   .then(response => {
+//       const $ = cheerio.load(response.data);
+//       // Parse the HTML and extract relevant data
+//       const prices = []; // This should contain the extracted data
+//       // Iterate over the data and save it to MongoDB
+//       prices.forEach(price => {
+//           Price.create(price);
+//       });
+//   })
+//   .catch(error => {
+//       console.log(error);
+//   });
+
+// // Expose an API endpoint to retrieve data
+// app.get('/prices', async (req, res) => {
+//   try {
+//       const prices = await Price.find();
+//       res.json(prices);
+//   } catch (error) {
+//       res.status(500).json({ message: error.message });
+//   }
+// });
+
+const axios = require('axios');
+
+const cheerio = require('cheerio'); // Import cheerio library
+
+
+app.get('/prices', async (req, res) => {
+  try {
+      const response = await axios.get('https://www.indianspices.com/marketing/price/domestic/daily-price.html');
+      const html = response.data;
+      
+      // Load the HTML into cheerio
+      const $ = cheerio.load(html);
+
+      // Extract cardamom prices
+      const cardamomPrices = [];
+      $('table tr').each((index, element) => {
+          const columns = $(element).find('td');
+          if (columns.length === 8) { // Fix the condition to check for 8 cells
+              const price = {
+                  date: $(columns[1]).text(),
+                  auctioneer: $(columns[2]).text(),
+                  lots: parseInt($(columns[3]).text()),
+                  totalQty: parseFloat($(columns[4]).text()),
+                  qtySold: parseFloat($(columns[5]).text()),
+                  maxPrice: parseFloat($(columns[6]).text()),
+                  avgPrice: parseFloat($(columns[7]).text())
+              };
+              cardamomPrices.push(price);
+          }
+      });
+
+      console.log("Backend cardamom prices:", cardamomPrices); // Log the cardamom prices
+      res.json(cardamomPrices);
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      res.status(500).send('Error fetching data');
   }
 });

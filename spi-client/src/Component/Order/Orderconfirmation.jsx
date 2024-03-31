@@ -99,39 +99,45 @@ const OrderConfirmation = () => {
       // localStorage.setItem('orderId', orderId);
 
         const options = {
-          key: 'rzp_test_QCVPmuBwOiEzBI',
+          key: "rzp_test_QCVPmuBwOiEzBI",
           amount: orderDetails.totalAmount * 100,
-          currency: 'INR',
-          name: 'Your Company',
-          description: 'Payment for Order',
+          currency: "INR",
+          name: "Your Company",
+          description: "Payment for Order",
           order_id: order_Id,
-          handler: function (response) {
-            console.log('Payment Successful:', response);
-            axios.post(`http://localhost:5000/api/order/order/${productId}`, { ...orderDetails, orderItems, paymentDetails: response })
-  .then(response => {
-    setOrderPlaced(true);
-    console.log('Order placed successfully', response.data);
-    const orderId=response.data.orderId;
-    localStorage.setItem('orderId', orderId);
-
-    alert('Order placed successfully');
-  })
-  
-
-              
-
-              .catch((error) => {
-                console.error('Error placing order:', error);
-                alert('An error occurred while placing the order.');
+          handler: async function (response) {
+            console.log("Payment Successful:", response);
+            try {
+              const orderPlacedResponse = await axios.post(`http://localhost:5000/api/order/order/${productId}`, {
+                ...orderDetails,
+                orderItems,
+                paymentDetails: response,
               });
+              
+              setOrderPlaced(true);
+              console.log("Order placed successfully", orderPlacedResponse.data);
+              
+              const orderId = orderPlacedResponse.data.orderId;
+              localStorage.setItem("orderId", orderId);
+          
+              await updateDeliveryStatus(orderId);
+              
+              alert("Order placed successfully");
+            } catch (error) {
+              console.error("Error placing order:", error);
+              alert("An error occurred while placing the order.");
+            }
           },
+          
+             
+          
           prefill: {
-            name: orderDetails.name || 'Test User',
-            email: orderDetails.email || 'test.user@example.com',
-            contact: orderDetails.phoneNumber || '9999999999',
+            name: orderDetails.name || "Test User",
+            email: orderDetails.email || "test.user@example.com",
+            contact: orderDetails.phoneNumber || "9999999999",
           },
           theme: {
-            color: '#3399cc',
+            color: "#3399cc",
           },
         };
 
@@ -153,6 +159,17 @@ const OrderConfirmation = () => {
 
       console.error('Error placing order:', error);
       alert('An error occurred while placing the order.');
+    }
+  };
+
+  const updateDeliveryStatus = async (orderId) => {
+    try {
+      // Update delivery status to mark as "Order Confirmed"
+      await axios.post(`http://localhost:5000/api/delivery/update-order-confirmed/${orderId}`);
+      console.log('Delivery status updated for order:', orderId);
+    } catch (error) {
+      console.error('Error updating delivery status:', error);
+      // Handle error appropriately, like showing an alert message
     }
   };
 

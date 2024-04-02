@@ -9,7 +9,13 @@ const Register2 = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    address: '',
+    address: {
+      houseNo: '',
+      area: '',
+      city: '',
+      state: '',
+      pinCode: ''
+    }
   });
 
   const [errors, setErrors] = useState({});
@@ -20,7 +26,19 @@ const Register2 = () => {
       ...prevData,
       [name]: value,
     }));
+    // Validate input on change
+    validateInput(name, value);
+  };
 
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      address: {
+        ...prevData.address,
+        [name]: value
+      }
+    }));
     // Validate input on change
     validateInput(name, value);
   };
@@ -77,10 +95,14 @@ const Register2 = () => {
           delete updatedErrors[name];
         }
         break;
-      case 'address':
-        // Validate Address (not empty)
+      case 'houseNo':
+      case 'area':
+      case 'city':
+      case 'state':
+      case 'pinCode':
+        // Validate Address Subfields (not empty)
         if (!value.trim()) {
-          updatedErrors[name] = 'Address is required';
+          updatedErrors[name] = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
         } else {
           delete updatedErrors[name];
         }
@@ -94,7 +116,7 @@ const Register2 = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Check for errors before submitting
     if (Object.keys(errors).length === 0) {
       try {
@@ -103,13 +125,16 @@ const Register2 = () => {
         alert(response.data.msg);
       } catch (error) {
         console.error(error);
-        alert('An error occurred during registration');
+        if (error.response && error.response.status === 400 && error.response.data.error === 'Duplicate email') {
+          alert('This email address is already registered. Please use a different email address.');
+        } else {
+          alert('An error occurred during registration');
+        }
       }
     }
   };
 
   return (
-    <div className="shop-registration-container">
     <div className="container mt-5">
       <h2>Registration</h2>
       <form onSubmit={handleSubmit}>
@@ -179,20 +204,72 @@ const Register2 = () => {
           {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
         </div>
         <div className="mb-3">
-          <label htmlFor="address" className="form-label">Address</label>
-          <textarea
-            className={`form-control ${errors.address ? 'is-invalid' : ''}`}
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
+          <label htmlFor="houseNo" className="form-label">House No.</label>
+          <input
+            type="text"
+            className={`form-control ${errors.houseNo ? 'is-invalid' : ''}`}
+            id="houseNo"
+            name="houseNo"
+            value={formData.address.houseNo}
+            onChange={handleAddressChange}
             required
           />
-          {errors.address && <div className="invalid-feedback">{errors.address}</div>}
+          {errors.houseNo && <div className="invalid-feedback">{errors.houseNo}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="area" className="form-label">Area</label>
+          <input
+            type="text"
+            className={`form-control ${errors.area ? 'is-invalid' : ''}`}
+            id="area"
+            name="area"
+            value={formData.address.area}
+            onChange={handleAddressChange}
+            required
+          />
+          {errors.area && <div className="invalid-feedback">{errors.area}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="city" className="form-label">City</label>
+          <input
+            type="text"
+            className={`form-control ${errors.city ? 'is-invalid' : ''}`}
+            id="city"
+            name="city"
+            value={formData.address.city}
+            onChange={handleAddressChange}
+            required
+          />
+          {errors.city && <div className="invalid-feedback">{errors.city}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="state" className="form-label">State</label>
+          <input
+            type="text"
+            className={`form-control ${errors.state ? 'is-invalid' : ''}`}
+            id="state"
+            name="state"
+            value={formData.address.state}
+            onChange={handleAddressChange}
+            required
+          />
+          {errors.state && <div className="invalid-feedback">{errors.state}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="pinCode" className="form-label">Pin Code</label>
+          <input
+            type="text"
+            className={`form-control ${errors.pinCode ? 'is-invalid' : ''}`}
+            id="pinCode"
+            name="pinCode"
+            value={formData.address.pinCode}
+            onChange={handleAddressChange}
+            required
+          />
+          {errors.pinCode && <div className="invalid-feedback">{errors.pinCode}</div>}
         </div>
         <button type="submit" className="btn btn-primary">Register</button>
       </form>
-    </div>
     </div>
   );
 };

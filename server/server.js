@@ -20,9 +20,9 @@ const table = require("./controllers/table")
 const dailyslot = require("./controllers/dailyslot")
 const bookslot = require("./controllers/bookslot")
 const dealerreg = require("./controllers/dealerreg")
-
+const price = require("./controllers/price")
 const license = require("./controllers/license")
-
+const selling = require("./controllers/selling")
 const delivery = require("./controllers/delivery")
 
 
@@ -47,6 +47,9 @@ app.use("/api/shop",table)
 app.use("/api/shopreg",shopreg)
 app.use("/api/ordertable",table)
 app.use("/api/users",table)
+app.use("/api/update-price",price)
+app.use("/api/get-price",price)
+app.use("/api/user",price)
 app.use("/api/user",table)
 app.use("/api/dealertable",table)
 app.use("/api/ordertable",table)
@@ -64,7 +67,7 @@ app.use("/api/bookingsold",bookslot)
 app.use("/api/dealerreg",dealerreg)
 app.use("/api/dealerview",dealerreg)
 app.use("/api/approvedealer",dealerreg)
-
+app.use("/api/selling",selling)
 app.use("/api/licenserequest",license)
 app.use("/api/getlicense",license)
 app.use("/api/generatelicense",license)
@@ -149,34 +152,55 @@ mongoose.connect('mongodb://localhost:27017/Project')
 // Registration for Customer
 app.post('/register', async (req, res) => {
   const { name, username, email, password, confirmPassword, address } = req.body;
-  console.log(name, username, email, password, confirmPassword, address);
 
   try {
-    const newUser = new Users({ name, username, email, password, confirmPassword, address, role: 'customer' });
+    // Create a new user instance with the provided data
+    const newUser = new Users({ 
+      name, 
+      username, 
+      email, 
+      password, 
+      confirmPassword, 
+      address, 
+      role: 'customer' 
+    });
 
     // Save the user to the database
     await newUser.save();
 
-    res.status(201).json({ msg: 'Customer registered successfully' });
+    // Respond with success message
+    res.status(201).json({ msg: 'Dealer registered successfully' });
   } catch (error) {
+    // Handle errors
     console.error(error);
-    res.status(500).json({ msg: 'Failed to register customer' });
+    res.status(500).json({ msg: 'Failed to register dealer' });
   }
 });
+
 
 // Registration for Dealer
 app.post('/register1', async (req, res) => {
   const { name, username, email, password, confirmPassword, address } = req.body;
-  console.log(name, username, email, password, confirmPassword, address);
 
   try {
-    const newUser = new Users({ name, username, email, password, confirmPassword, address, role: 'dealer' });
+    // Create a new user instance with the provided data
+    const newUser = new Users({ 
+      name, 
+      username, 
+      email, 
+      password, 
+      confirmPassword, 
+      address, 
+      role: 'dealer' 
+    });
 
     // Save the user to the database
     await newUser.save();
 
+    // Respond with success message
     res.status(201).json({ msg: 'Dealer registered successfully' });
   } catch (error) {
+    // Handle errors
     console.error(error);
     res.status(500).json({ msg: 'Failed to register dealer' });
   }
@@ -185,38 +209,60 @@ app.post('/register1', async (req, res) => {
 // Registration for Landowner
 app.post('/register2', async (req, res) => {
   const { name, username, email, password, confirmPassword, address } = req.body;
-  console.log(name, username, email, password, confirmPassword, address);
 
   try {
-    const newUser = new Users({ name, username, email, password, confirmPassword, address, role: 'landowner' });
+    // Create a new user instance with the provided data
+    const newUser = new Users({ 
+      name, 
+      username, 
+      email, 
+      password, 
+      confirmPassword, 
+      address, 
+      role: 'landowner' 
+    });
 
     // Save the user to the database
     await newUser.save();
 
-    res.status(201).json({ msg: 'Landowner registered successfully' });
+    // Respond with success message
+    res.status(201).json({ msg: 'Dealer registered successfully' });
   } catch (error) {
+    // Handle errors
     console.error(error);
-    res.status(500).json({ msg: 'Failed to register landowner' });
+    res.status(500).json({ msg: 'Failed to register dealer' });
   }
 });
+
 
 
 app.post('/register3', async (req, res) => {
   const { name, username, email, password, confirmPassword, address } = req.body;
-  console.log(name, username, email, password, confirmPassword, address);
 
   try {
-    const newUser = new Users({ name, username, email, password, confirmPassword, address, role: 'parcher' });
+    // Create a new user instance with the provided data
+    const newUser = new Users({ 
+      name, 
+      username, 
+      email, 
+      password, 
+      confirmPassword, 
+      address, 
+      role: 'parcher' 
+    });
 
     // Save the user to the database
     await newUser.save();
 
-    res.status(201).json({ msg: 'Parcher registered successfully' });
+    // Respond with success message
+    res.status(201).json({ msg: 'Dealer registered successfully' });
   } catch (error) {
+    // Handle errors
     console.error(error);
-    res.status(500).json({ msg: 'Failed to register landowner' });
+    res.status(500).json({ msg: 'Failed to register dealer' });
   }
 });
+
 
 
 app.post('/login', async (req, res) => {
@@ -353,77 +399,6 @@ app.post('/api/reset-password', async (req, res) => {
 });
 
 
-// const axios = require('axios');
-
-// app.get('/cardamom-price', async (req, res) => {
-//   try {
-//     const response = await axios.get('https://www.indianspices.com/marketing/price/domestic/daily-price.html');
-//     const html = response.data;
-
-//     // Parse HTML string into a DOM document
-//     const parser = new DOMParser();
-//     const doc = parser.parseFromString(html, 'text/html');
-
-//     // Find the cardamom price element
-//     const cardamomPriceElement = doc.getElementById('domesticDailyPrice')
-//       .getElementsByClassName('price-list-content')[0]
-//       .getElementsByTagName('tr')[1] // Assuming cardamom price is the second row
-//       .getElementsByTagName('td')[2]; // Assuming price is in the third column
-
-//     // Extract the price text
-//     const cardamomPrice = cardamomPriceElement.textContent.trim();
-
-//     res.json({ price: cardamomPrice });
-//   } catch (error) {
-//     console.error('Error fetching cardamom price:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-
-
-
-// const { createProxyMiddleware } = require('http-proxy-middleware');
-
-// // Set up proxy middleware
-// app.use('/priceadd', createProxyMiddleware({
-//   target: 'https://www.indianspices.com',
-//   changeOrigin: true,
-//   pathRewrite: {
-//     '^/priceadd': '/marketing/price/domestic/daily-price.html', // Adjust path as needed
-//   },
-// }));
-
-// app.listen(3001, () => {
-//   console.log('Proxy server running on port 3001');
-// });
-
-
-// const axios = require('axios');
-// // Fetch data from external website
-// axios.get('https://www.indianspices.com/marketing/price/domestic/daily-price.html')
-//   .then(response => {
-//       const $ = cheerio.load(response.data);
-//       // Parse the HTML and extract relevant data
-//       const prices = []; // This should contain the extracted data
-//       // Iterate over the data and save it to MongoDB
-//       prices.forEach(price => {
-//           Price.create(price);
-//       });
-//   })
-//   .catch(error => {
-//       console.log(error);
-//   });
-
-// // Expose an API endpoint to retrieve data
-// app.get('/prices', async (req, res) => {
-//   try {
-//       const prices = await Price.find();
-//       res.json(prices);
-//   } catch (error) {
-//       res.status(500).json({ message: error.message });
-//   }
-// });
-
 const axios = require('axios');
 
 const cheerio = require('cheerio'); // Import cheerio library
@@ -439,21 +414,21 @@ app.get('/prices', async (req, res) => {
 
       // Extract cardamom prices
       const cardamomPrices = [];
-      $('table tr').each((index, element) => {
-          const columns = $(element).find('td');
-          if (columns.length === 8) { // Fix the condition to check for 8 cells
-              const price = {
-                  date: $(columns[1]).text(),
-                  auctioneer: $(columns[2]).text(),
-                  lots: parseInt($(columns[3]).text()),
-                  totalQty: parseFloat($(columns[4]).text()),
-                  qtySold: parseFloat($(columns[5]).text()),
-                  maxPrice: parseFloat($(columns[6]).text()),
-                  avgPrice: parseFloat($(columns[7]).text())
-              };
-              cardamomPrices.push(price);
-          }
-      });
+$('table tr').each((index, element) => {
+    const columns = $(element).find('td');
+    if (columns.length === 8) { // Fix the condition to check for 8 cells
+        const price = {
+            date: $(columns[1]).text(),
+            auctioneer: $(columns[2]).text(),
+            lots: parseInt($(columns[3]).text()),
+            totalQty: parseFloat($(columns[4]).text()),
+            qtySold: parseFloat($(columns[5]).text()),
+            maxPrice: parseFloat($(columns[6]).text().replace(/,/g, '')), // Remove commas before parsing
+            avgPrice: parseFloat($(columns[7]).text().replace(/,/g, '')) // Remove commas before parsing
+        };
+        cardamomPrices.push(price);
+    }
+});
 
       console.log("Backend cardamom prices:", cardamomPrices); // Log the cardamom prices
       res.json(cardamomPrices);

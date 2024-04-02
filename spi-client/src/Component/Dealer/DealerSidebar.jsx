@@ -50,7 +50,7 @@ const navItems = [
     icon: <Groups2Outlined />,
   },
   {
-    text: "Users",
+    text: "Update Price to Landowner",
     icon: <ReceiptLongOutlined />,
   },
   {
@@ -58,7 +58,7 @@ const navItems = [
     icon: <PublicOutlined />,
   },
   {
-    text: "Orderdetails",
+    text: "Order details Dealer",
     icon: <PublicOutlined />,
   },
   {

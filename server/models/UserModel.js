@@ -1,5 +1,12 @@
-// users.model.js
 const mongoose = require('mongoose');
+
+const addressSchema = new mongoose.Schema({
+  houseNo: { type: String, required: true },
+  area: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  pinCode: { type: String, required: true }
+});
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -7,7 +14,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   confirmPassword: { type: String },
-  address: { type: String, required: true },
+  address: { type: addressSchema, required: true },
   role: {
     type: String,
     enum: ['customer', 'landowner', 'dealer', 'admin','parcher'],

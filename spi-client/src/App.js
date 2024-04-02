@@ -42,12 +42,9 @@ import BookingTablePage from "./Component/Tables/BookingTable";
 import DealerRegPage from "./Pages/Dealer/DealerRegPage";
 import SpicesHome from "./Component/SpicesBoard/SpicesHome";
 import DealerViewPage from "./Pages/Dealer/DealerViewPage";
-
 import SpicesBoardPage from "./Pages/Users/SpicesBoardPage";
 import LicenseRequestForm from "./Component/License/LicesneRequest";
 import LicenseRequestDisplay from "./Component/License/IssueLicense";
-
-
 import ShopLocationMap from "./Component/Map";
 import RazorpayPayment from "./Component/Payment/Razorpay";
 import Chat from "./Component/Chat";
@@ -57,8 +54,11 @@ import OrderTablePage from "./Component/Tables/Ordertable";
 import Invoice from "./Component/Order/Bill";
 import DealerHome from "./Component/Dealer/DealerHome";
 import OrderDetails from "./Component/Order/OrderDetails";
-import CardamomPriceComponent from "./Component/CardamomPrices/CardamomPrice";
-
+import PriceFromSpicesboard from "./Pages/Price/PriceFromSpicesboard";
+import PriceUpdateLandPage from "./Pages/Price/PriceUpdateLandPage";
+import DisplayPrices from "./Component/CardamomPrices/DealerPriceView";
+import SellCardamomForm from "./Component/CardamomPrices/SellCardamom";
+import CardamomSoldPage from "./Pages/CardamomSoldPage";
 
 
 function App() {
@@ -81,7 +81,7 @@ function App() {
             <Route path="/about" element={<AboutPage/>} />
             <Route path="/Add product" element={<AddProductPage/>} />
             <Route path="/productview" element={<ProductViewPage/>} />
-            <Route path="/orderdetaildealer" element={<OrderDetails/>} />
+            <Route path="/Order details Dealer" element={<OrderDetails/>} />
             <Route path="/moredetails/:productId" element={<MoredetailsPage />} />
             <Route path="/order" element={<OrderPage/>} />
             <Route path="/orderconfirmation/:productId" element={<OrderPage />}/>
@@ -104,11 +104,11 @@ function App() {
             <Route path="/forgetpassword" element={<ForgotPassword />}/>
             <Route path="/otp" element={<OtpVerification />}/>
             <Route path="/spicesboard" element={<SpicesHome />}/>
-            <Route path="/Spices Board Cardamom Price" element={<CardamomPriceComponent />}/>
+            <Route path="/Spices Board Cardamom Price" element={<PriceFromSpicesboard />}/>
+            <Route path="/Update Price to Landowner" element={<PriceUpdateLandPage />}/>
             <Route path="/spices" element={<SpicesBoardPage />}/>
             <Route path="/licenserequest" element={<LicenseRequestForm />}/>
             <Route path="/issuelicense" element={<LicenseRequestDisplay />}/>
-
             <Route path="/shoplocation/:shopId" element={<ShopLocationMap />}/>
             <Route path="/payment" element={<RazorpayPayment />}/>
             <Route path="/orderhistory" element={<OrderHistory/>}/>
@@ -116,6 +116,9 @@ function App() {
             <Route path="/chat" element={<Chat />}/>
             <Route path="/chat1" element={<Chat1 />}/>
             <Route path="/bill" element={<Invoice />}/>
+            <Route path="/sell-cardamom/:priceId/:spiceCenterName/:userId" element={<SellCardamomForm />} />
+            <Route path="/displayprices" element={<DisplayPrices />}/>
+            <Route path="/soldcardamom" element={< CardamomSoldPage/>}/>
           </Routes>
           </UserProvider>
           </ThemeProvider>

@@ -34,7 +34,7 @@ const LandNavbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         View Parchers
       </Typography>
     </Button>
-    <Button onClick={() => navigate('/dealerpriceview')}>
+    <Button onClick={() => navigate('/displayprices')}>
       <Typography fontWeight="bold" fontSize="1.0rem" sx={{ color: theme.palette.secondary[100] }}>
         Sell Cardamom
       </Typography>
